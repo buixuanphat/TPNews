@@ -2,9 +2,13 @@ package com.example.tpnews_ungdungdocbao;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -21,6 +25,8 @@ public class DetailsActivity extends AppCompatActivity {
 
     ImageView imgImage, imgLogo;
     TextView txtTitle, txtDescription, txtContent;
+
+    ImageButton ibFontSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,13 @@ public class DetailsActivity extends AppCompatActivity {
         Glide.with(DetailsActivity.this).load(intent.getStringExtra("imageurl")).into(imgImage);
         Glide.with(DetailsActivity.this).load(intent.getStringExtra("logourl")).into(imgLogo);
 
+        ibFontSize = findViewById(R.id.imageButton);
+        ibFontSize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              
+            }
+        });
 
 
 

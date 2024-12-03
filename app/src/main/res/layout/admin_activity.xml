@@ -37,7 +37,6 @@
         app:tabTextColor="@color/black"
         app:tabMode="scrollable"
         app:tabGravity="center"
-        app:tabTextAppearance="@style/CustomTabTextStyle"
         app:tabIndicatorColor="@color/tab_selected_color"/>
 
     <!-- Content Area -->

@@ -13,18 +13,19 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ArticleAdapter extends BaseAdapter {
+public class ChosenOutletAdapter extends BaseAdapter {
 
     Context context;
     int layout;
     ArrayList<Article> arrayList;
-    ArrayList<Outlet> outletList;
 
-    public ArticleAdapter(Context context, int layout, ArrayList<Article> arrayList, ArrayList<Outlet> outletList) {
+    String logo;
+
+    public ChosenOutletAdapter(Context context, int layout, ArrayList<Article> arrayList, String logo) {
         this.context = context;
         this.layout = layout;
         this.arrayList = arrayList;
-        this.outletList = outletList;
+        this.logo = logo;
     }
 
     @Override
@@ -50,16 +51,7 @@ public class ArticleAdapter extends BaseAdapter {
         ImageView imgvImage = convertView.findViewById(R.id.imgvLayoutArticleImage);
         Glide.with(context).load(arrayList.get(position).getImageUrl()).into(imgvImage);
         ImageView imgvLogo = convertView.findViewById(R.id.imgvLayoutOutletImage);
-        String logoLink="";
-        for(Outlet ol : outletList)
-        {
-            if (Objects.equals(ol.getName(), arrayList.get(position).getOutlet()))
-            {
-                logoLink = ol.getLogoLink();
-                break;
-            }
-        }
-        Glide.with(context).load(logoLink).into(imgvLogo);
+        Glide.with(context).load(logo).into(imgvLogo);
 
         TextView txtTitle = convertView.findViewById(R.id.txtLayoutArticleTitle);
         txtTitle.setText(arrayList.get(position).getTitle());

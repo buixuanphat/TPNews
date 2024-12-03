@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Style cho chữ trong TabLayout -->
-    <style name="CustomTabTextStyle" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">18dp</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-</resources>
-

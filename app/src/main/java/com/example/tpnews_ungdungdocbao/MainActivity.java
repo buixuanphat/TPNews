@@ -1,12 +1,11 @@
 package com.example.tpnews_ungdungdocbao;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -19,9 +18,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Lấy chế độ Dark Mode từ SharedPreferences
+        SharedPreferences preferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        boolean isDarkMode = preferences.getBoolean("isDarkMode", false);
+
+        // Thiết lập chế độ Dark Mode
+        AppCompatDelegate.setDefaultNightMode(isDarkMode
+                ? AppCompatDelegate.MODE_NIGHT_YES
+                : AppCompatDelegate.MODE_NIGHT_NO);
+
+        // Đặt layout chính
         setContentView(R.layout.activity_main);
 
-        // Ánh xạ View
+        // Ánh xạ các thành phần giao diện
         viewPager = findViewById(R.id.viewPager);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
@@ -29,7 +39,14 @@ public class MainActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(adapter);
 
-        // Liên kết ViewPager với BottomNavigationView
+        // Đồng bộ BottomNavigationView và ViewPager
+        setupNavigation();
+    }
+
+    /**
+     * Đồng bộ hóa ViewPager và BottomNavigationView
+     */
+    private void setupNavigation() {
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if(item.getItemId()==R.id.nav_home)
             {
@@ -43,14 +60,12 @@ public class MainActivity extends AppCompatActivity {
             {
                 viewPager.setCurrentItem(2);
             }
-            else if(item.getItemId()==R.id.nav_menu)
-            {
+            else if(item.getItemId()==R.id.nav_menu) {
                 viewPager.setCurrentItem(3);
             }
             return true;
         });
 
-        // Đồng bộ ViewPager với BottomNavigationView
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {

@@ -16,6 +16,9 @@
         android:theme="@style/Theme.TPNewsỨngDụngĐọcBáo"
         tools:targetApi="31">
         <activity
+            android:name=".ChosenOutletActivity"
+            android:exported="false" />
+        <activity
             android:name=".DetailsActivity"
             android:exported="false" />
         <activity
