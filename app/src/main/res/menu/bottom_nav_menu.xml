@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/home"
+        android:title="Trang chủ" />
+    <item
+        android:id="@+id/nav_trend"
+        android:icon="@drawable/trend"
+        android:title="Xu hướng" />
+    <item
+        android:id="@+id/nav_video"
+        android:icon="@drawable/video"
+        android:title="Video" />
+    <item
+        android:id="@+id/nav_menu"
+        android:icon="@drawable/menu"
+        android:title="Menu" />
+</menu>

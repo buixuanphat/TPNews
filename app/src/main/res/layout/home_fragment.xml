@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".HomeFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalscrollview"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/linearScrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/progressBarHome"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+        <ListView
+            android:id="@+id/lvArticle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+</LinearLayout>

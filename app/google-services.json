@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "507171352680",
+    "project_id": "tpnews-b7b07",
+    "storage_bucket": "tpnews-b7b07.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507171352680:android:e6c03581a89aacb955cbdd",
+        "android_client_info": {
+          "package_name": "com.example.tpnews_ungdungdocbao"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgeFhSGtmAJeAXLEEgHcJrbuo5gG3_kAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

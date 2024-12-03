@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    
+    android:padding="16dp"
+    tools:context=".AdminActivity">
+
+    <!-- Header with Title and Icon -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:id="@+id/adminTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quản lý ứng dụng"
+            android:textSize="22sp"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <!-- Customized TabLayout -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabSelectedTextColor="@color/tab_selected_color"
+        app:tabTextColor="@color/black"
+        app:tabMode="scrollable"
+        app:tabGravity="center"
+        app:tabTextAppearance="@style/CustomTabTextStyle"
+        app:tabIndicatorColor="@color/tab_selected_color"/>
+
+    <!-- Content Area -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
