@@ -1,5 +1,6 @@
 package com.example.tpnews_ungdungdocbao;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -112,6 +114,25 @@ public class HomeFragment extends Fragment {
                             }
                             articleAdapter = new ArticleAdapter(getContext(), R.layout.layout_article, articles, arrlOutlet);
                             lvArticle.setAdapter(articleAdapter);
+                            lvArticle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Intent intent = new Intent(getContext(), DetailsActivity.class);
+                                    intent.putExtra("title", articles.get(position).getTitle());
+                                    intent.putExtra("description", articles.get(position).getDescription());
+                                    intent.putExtra("content", articles.get(position).getContent());
+                                    intent.putExtra("imageurl", articles.get(position).getImageUrl());
+                                    for (Outlet outlet : arrlOutlet)
+                                    {
+                                        if(outlet.getName().equals(articles.get(position).getOutlet()))
+                                        {
+                                            intent.putExtra("logourl", outlet.getLogoLink());
+                                            break;
+                                        }
+                                    }
+                                    startActivity(intent);
+                                }
+                            });
                         }
                     });
                 }
@@ -120,6 +141,7 @@ public class HomeFragment extends Fragment {
                 {
                     firstChoice.performClick();
                 }
+
             }
 
             @Override
