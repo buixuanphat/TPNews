@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         // Thiết lập Adapter cho ViewPager
         ViewPagerAdapter adapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(4);
 
         // Đồng bộ BottomNavigationView và ViewPager
         setupNavigation();

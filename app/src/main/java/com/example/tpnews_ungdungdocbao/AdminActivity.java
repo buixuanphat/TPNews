@@ -24,6 +24,7 @@ public class AdminActivity extends AppCompatActivity {
 
         adapter = new AdminFragmentAdapter(this);
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(3);
 
         // Thiết lập TabLayout và ViewPager
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
