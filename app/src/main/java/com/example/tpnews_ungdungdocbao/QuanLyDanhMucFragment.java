@@ -161,8 +161,28 @@ public class QuanLyDanhMucFragment extends Fragment {
                 builder.setNegativeButton("Xóa", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         String key = arrlCategory.get(position).getId();
+
+                        myFireBaseDB.child("Article")
+                                .orderByChild("category")
+                                .equalTo(arrlCategory.get(position).getName())
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        // Duyệt qua các bài báo có category và xóa
+                                        for (DataSnapshot articleSnapshot : dataSnapshot.getChildren()) {
+                                            String articleId = articleSnapshot.getKey();
+                                            // Xóa bài báo
+                                            myFireBaseDB.child("Article").child(articleId).removeValue();
+                                        }
+
+                                    }
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+
+
                         myFireBaseDB.child("Category").child(key).removeValue(new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {

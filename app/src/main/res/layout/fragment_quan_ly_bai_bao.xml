@@ -14,6 +14,13 @@
         android:text="Thêm bài báo" />
 
     <Button
+        android:id="@+id/btnUpdateArticle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cập nhật"
+        android:visibility="gone"/>
+
+    <Button
         android:id="@+id/btnSaveContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -1,11 +1,14 @@
 package com.example.tpnews_ungdungdocbao;
 
-import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -29,184 +32,207 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
-    private ArrayList<Category> arrlCategory;
-    private ArrayList<Article> arrlArticle;
-    private ArrayList<Outlet> arrlOutlet;
-
-    private DatabaseReference myFireBaseDB;
-    private ValueEventListener categoryListener, outletListener, articleListener;
-
-    private ArticleAdapter articleAdapter;
-
+    private HorizontalScrollView scrollView;
+    private LinearLayout categoryContainer;
+    private ProgressBar progressBar;
     private ListView lvArticle;
-    private ProgressBar progressBarHome;
-    private HorizontalScrollView horizontalScrollView;
-    private LinearLayout linearScrollView;
-
-    private TextView selectedTextView = null;
+    private DatabaseReference firebaseDB;
+    private ArrayList<Category> categories = new ArrayList<>();
+    private ArrayList<Article> articles = new ArrayList<>();
+    private TextView selectedCategoryView = null;
+    private NetworkReceiver networkReceiver;
+    private ArticleAdapter articleAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
 
-        // Khởi tạo các thành phần UI
-        horizontalScrollView = view.findViewById(R.id.horizontalscrollview);
-        linearScrollView = view.findViewById(R.id.linearScrollView);
-        progressBarHome = view.findViewById(R.id.progressBarHome);
+        scrollView = view.findViewById(R.id.horizontalscrollview);
+        categoryContainer = view.findViewById(R.id.linearScrollView);
+        progressBar = view.findViewById(R.id.progressBarHome);
         lvArticle = view.findViewById(R.id.lvArticle);
+        progressBar.setVisibility(View.GONE);
 
-        arrlArticle = new ArrayList<>();
-        arrlOutlet = new ArrayList<>();
-        arrlCategory = new ArrayList<>();
+        // Khởi tạo và đăng ký NetworkReceiver
+        networkReceiver = new NetworkReceiver(new NetworkReceiver.NetworkListener() {
+            @Override
+            public void onNetworkAvailable() {
+                loadCategories();
+                saveArticlesForOffline();
+            }
 
-        myFireBaseDB = FirebaseDatabase.getInstance().getReference();
+            @Override
+            public void onNetworkLost() {
+                Toast.makeText(requireContext(), "Mất kết nối Internet", Toast.LENGTH_SHORT).show();
+                loadArticlesFromLocal();
+            }
+        });
 
-        loadCategories();
-        loadOutlets();
-        loadArticles();
+        // Đăng ký BroadcastReceiver để lắng nghe thay đổi trạng thái mạng
+        requireContext().registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
+
+
+
+
 
         return view;
     }
 
+    // Hàm tải danh mục và bài viết từ Firebase
     private void loadCategories() {
-        categoryListener = myFireBaseDB.child("Category").addValueEventListener(new ValueEventListener() {
+        articles.clear();
+        progressBar.setVisibility(View.VISIBLE);
+        firebaseDB = FirebaseDatabase.getInstance().getReference();
+        firebaseDB.child("Category").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (getContext() == null || linearScrollView == null) return;
+                categories.clear();
+                categoryContainer.removeAllViews();
 
-                arrlCategory.clear();
-                linearScrollView.removeAllViews();
+                if (!snapshot.exists()) {
+                    Toast.makeText(requireContext(), "Không tìm thấy danh mục.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Category cat = dataSnapshot.getValue(Category.class);
-                    if (cat != null) {
-                        arrlCategory.add(cat);
-                        addCategoryToScrollView(cat);
+                    Category category = dataSnapshot.getValue(Category.class);
+                    if (category != null) {
+                        categories.add(category);
+
+                        TextView textView = createCategoryTextView(category);
+                        textView.setOnClickListener(v -> onCategoryClick(category, textView));
+
+                        categoryContainer.addView(textView);
                     }
                 }
 
-                if (linearScrollView.getChildCount() > 0) {
-                    linearScrollView.getChildAt(0).performClick(); // Chọn item đầu tiên
+                if (!categories.isEmpty()) {
+                    TextView firstCategoryView = (TextView) categoryContainer.getChildAt(0);
+                    if (firstCategoryView != null) {
+                        firstCategoryView.performClick();
+                    }
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Lỗi kết nối với Firebase: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(requireContext(), "Lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void addCategoryToScrollView(Category category) {
-        TextView textView = new TextView(getContext());
+    // Tạo TextView cho danh mục
+    private TextView createCategoryTextView(Category category) {
+        TextView textView = new TextView(requireContext());
         textView.setText(category.getName());
         textView.setTextColor(Color.GRAY);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        textView.setLayoutParams(params);
         textView.setTextSize(20);
         textView.setPadding(20, 10, 20, 10);
-
-        textView.setOnClickListener(v -> {
-            if (selectedTextView != null) {
-                selectedTextView.setTextColor(Color.GRAY); // Reset màu cũ
-            }
-            textView.setTextColor(getResources().getColor(R.color.tab_selected_color));
-            selectedTextView = textView;
-
-            // Cuộn item được chọn về giữa
-            int scrollToX = (int) (textView.getX()
-                    + textView.getWidth() / 2
-                    - horizontalScrollView.getWidth() / 2);
-            horizontalScrollView.smoothScrollTo(scrollToX, 0);
-
-            // Cập nhật danh sách bài viết liên quan
-            ArrayList<Article> articles = new ArrayList<>();
-            for (Article article : arrlArticle) {
-                if (article.getCategory() != null && article.getCategory().equals(category.getName())) {
-                    articles.add(article);
-                }
-            }
-            updateArticleList(articles);
-        });
-
-        linearScrollView.addView(textView);
+        Typeface typeface = ResourcesCompat.getFont(requireContext(), R.font.roboto_medium);
+        textView.setTypeface(typeface != null ? typeface : Typeface.DEFAULT);
+        return textView;
     }
 
-    private void loadOutlets() {
-        outletListener = myFireBaseDB.child("Outlet").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrlOutlet.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Outlet outlet = dataSnapshot.getValue(Outlet.class);
-                    if (outlet != null) {
-                        arrlOutlet.add(outlet);
-                    }
-                }
-            }
+    // Xử lý sự kiện khi người dùng nhấn vào một danh mục
+    private void onCategoryClick(Category category, TextView textView) {
+        if (selectedCategoryView != null) {
+            selectedCategoryView.setTextColor(Color.GRAY);
+        }
+        textView.setTextColor(requireContext().getResources().getColor(R.color.tab_selected_color));
+        selectedCategoryView = textView;
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Lỗi kết nối với Firebase: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        int scrollToX = (int) (textView.getX() + textView.getWidth() / 2 - scrollView.getWidth() / 2);
+        scrollView.smoothScrollTo(scrollToX, 0);
+        articles.clear();
+        loadArticlesByCategory(category.getName());
     }
 
-    private void loadArticles() {
-        progressBarHome.setVisibility(View.VISIBLE);
-        articleListener = myFireBaseDB.child("Article").addValueEventListener(new ValueEventListener() {
+    // Tải bài viết theo danh mục
+    private void loadArticlesByCategory(String categoryName) {
+        progressBar.setVisibility(View.VISIBLE);
+        firebaseDB.child("Article").orderByChild("category").equalTo(categoryName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrlArticle.clear();
+
+                if (!snapshot.exists()) {
+                    articles.clear();
+                    updateArticleList();
+                    progressBar.setVisibility(View.GONE);
+                }
+
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Article article = dataSnapshot.getValue(Article.class);
                     if (article != null) {
-                        arrlArticle.add(article);
+                        articles.add(article);
                     }
                 }
-                progressBarHome.setVisibility(View.GONE);
+                updateArticleList();
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                progressBarHome.setVisibility(View.GONE);
-                Toast.makeText(getContext(), "Lỗi kết nối với Firebase: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(requireContext(), "Lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void updateArticleList(ArrayList<Article> articles) {
-        if (getContext() == null || lvArticle == null) return;
+    // Cập nhật danh sách bài viết
+    private void updateArticleList() {
+        if (articleAdapter == null) {
+            articleAdapter = new ArticleAdapter(requireContext(), R.layout.layout_article, articles);
+            lvArticle.setAdapter(articleAdapter);
+        } else {
+            articleAdapter.notifyDataSetChanged();
+        }
 
-        articleAdapter = new ArticleAdapter(getContext(), R.layout.layout_article, articles, arrlOutlet);
-        lvArticle.setAdapter(articleAdapter);
         lvArticle.setOnItemClickListener((parent, view, position, id) -> {
-            Intent intent = new Intent(getContext(), DetailsActivity.class);
-            Article article = articles.get(position);
-            intent.putExtra("title", article.getTitle());
-            intent.putExtra("description", article.getDescription());
-            intent.putExtra("content", article.getContent());
-            intent.putExtra("imageurl", article.getImageUrl());
-            for (Outlet outlet : arrlOutlet) {
-                if (outlet.getName().equals(article.getOutlet())) {
-                    intent.putExtra("logourl", outlet.getLogoLink());
-                    break;
-                }
-            }
+            Intent intent = new Intent(requireContext(), DetailsActivity.class);
+            intent.putExtra("id", articles.get(position).getId());
             startActivity(intent);
         });
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (myFireBaseDB != null) {
-            if (categoryListener != null) myFireBaseDB.child("Category").removeEventListener(categoryListener);
-            if (outletListener != null) myFireBaseDB.child("Outlet").removeEventListener(outletListener);
-            if (articleListener != null) myFireBaseDB.child("Article").removeEventListener(articleListener);
-        }
+    // Lưu bài viết khi mất kết nối
+    private void loadArticlesFromLocal() {
+        DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
+        ArrayList<Article> offlineArticles = databaseHelper.getNewsByCategory("Trang chủ");
+        articleAdapter = new ArticleAdapter(requireContext(), R.layout.layout_article, offlineArticles);
+        lvArticle.setAdapter(articleAdapter);
+        articleAdapter.notifyDataSetChanged();
+        lvArticle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(requireContext(), DetailsActivity.class);
+                intent.putExtra("id", offlineArticles.get(position).getId());
+                startActivity(intent);
+            }
+        });
+    }
+
+    // Hàm lưu bài viết xuống SQLite cho offline
+    private void saveArticlesForOffline() {
+        ArrayList<Article> offlineArticles = new ArrayList<>();
+        firebaseDB.child("Article").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Article article = dataSnapshot.getValue(Article.class);
+                    offlineArticles.add(article);
+                }
+                DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
+                databaseHelper.clearAllNews();
+                databaseHelper.insertNews(offlineArticles);
+                Toast.makeText(requireContext(), "Đã lưu và sqlite", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(requireContext(), "Lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

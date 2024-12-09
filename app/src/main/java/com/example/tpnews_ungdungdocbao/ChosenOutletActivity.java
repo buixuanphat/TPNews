@@ -40,14 +40,12 @@ public class ChosenOutletActivity extends AppCompatActivity {
 
         myFireBaseDB = FirebaseDatabase.getInstance().getReference();
         Intent intent = getIntent();
-
         ListView lvChosenOutlet = findViewById(R.id.lvChosenOutlet);
         ArrayList<Article> arrlArticle = new ArrayList<>();
-        ArrayList <Article> arrlChosen = new ArrayList<>();
-        ChosenOutletAdapter adapter = new ChosenOutletAdapter(ChosenOutletActivity.this, R.layout.layout_article, arrlChosen, intent.getStringExtra("logo"));
+        ArticleAdapter adapter = new ArticleAdapter(ChosenOutletActivity.this, R.layout.layout_article, arrlArticle);
         lvChosenOutlet.setAdapter(adapter);
 
-        myFireBaseDB.child("Article").addValueEventListener(new ValueEventListener() {
+        myFireBaseDB.child("Article").orderByChild("outletName").equalTo(intent.getStringExtra("outlet")).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
@@ -56,14 +54,7 @@ public class ChosenOutletActivity extends AppCompatActivity {
                         arrlArticle.add(article);
                     }
                 }
-                for (Article article : arrlArticle)
-                {
-                    if(article.getOutlet().equals(intent.getStringExtra("outlet")))
-                    {
-                        arrlChosen.add(article);
-                    }
-                }
-                if (arrlChosen.isEmpty())
+                if (arrlArticle.isEmpty())
                 {
                     Toast.makeText(ChosenOutletActivity.this, "Không có nội dung", Toast.LENGTH_SHORT).show();
                 }
@@ -71,6 +62,7 @@ public class ChosenOutletActivity extends AppCompatActivity {
                 ProgressBar progressBar = findViewById(R.id.progressBarChosenOutlet);
                 progressBar.setVisibility(View.GONE);
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -81,11 +73,7 @@ public class ChosenOutletActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent2 = new Intent(ChosenOutletActivity.this, DetailsActivity.class);
-                intent2.putExtra("title", arrlChosen.get(position).getTitle());
-                intent2.putExtra("description", arrlChosen.get(position).getDescription());
-                intent2.putExtra("content", arrlChosen.get(position).getContent());
-                intent2.putExtra("imageurl", arrlChosen.get(position).getImageUrl());
-                intent2.putExtra("logourl", intent.getStringExtra("logo"));
+                intent2.putExtra("id", arrlArticle.get(position).getId());
                 startActivity(intent2);
             }
         });

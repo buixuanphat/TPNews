@@ -139,7 +139,6 @@ public class MenuFragment extends Fragment {
         lvOutlet.setOnItemClickListener((parent, view1, position, id) -> {
             Intent intent = new Intent(getContext(), ChosenOutletActivity.class);
             intent.putExtra("outlet", arrlOutlet.get(position).getName());
-            intent.putExtra("logo", arrlOutlet.get(position).getLogoLink());
             startActivity(intent);
         });
 

@@ -1,6 +1,9 @@
 package com.example.tpnews_ungdungdocbao;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +15,16 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-
 public class ArticleManagerAdapter extends BaseAdapter {
 
-    Context context;
-    int layout;
-    ArrayList<Article> arrayList = new ArrayList<>();
+    private Context context;
+    private int layout;
+    private ArrayList<Article> arrayList;
 
     public ArticleManagerAdapter(Context context, int layout, ArrayList<Article> arrayList) {
         this.context = context;
         this.layout = layout;
-        this.arrayList = arrayList;
+        this.arrayList = arrayList != null ? arrayList : new ArrayList<>();
     }
 
     @Override
@@ -32,25 +34,32 @@ public class ArticleManagerAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return arrayList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(layout, null);
+        convertView = inflater.inflate(layout, parent, false);
 
         TextView txtName = convertView.findViewById(R.id.txtLayoutArticleManager);
+        ImageView logo = convertView.findViewById(R.id.imgvLayoutArticleManager);
+
         txtName.setText(arrayList.get(position).getTitle());
 
-        ImageView logo = convertView.findViewById(R.id.imgvLayoutArticleManager);
-        Glide.with(context).load(arrayList.get(position).getImageUrl()).into(logo);
+        String base64Image = arrayList.get(position).getImage();
+        Bitmap bitmap = convertBase64ToBitmap(base64Image);
+        logo.setImageBitmap(bitmap);
 
         return convertView;
+    }
+    private Bitmap convertBase64ToBitmap(String base64String) {
+        byte[] decodedBytes = Base64.decode(base64String, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 }

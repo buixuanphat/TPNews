@@ -5,20 +5,22 @@ public class Article {
     private String title;
     private String description;
     private String content;
-    private String imageUrl;
-    private String outlet;
+    private String image;
+    private String outletName;
+    private String outletLogo;
     private String category;
 
     public Article() {
     }
 
-    public Article(String id, String title, String description, String content, String imageUrl, String outlet, String category) {
+    public Article(String id, String title, String description, String content, String image, String outletName, String outletLogo, String category) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.content = content;
-        this.imageUrl = imageUrl;
-        this.outlet = outlet;
+        this.image = image;
+        this.outletName = outletName;
+        this.outletLogo = outletLogo;
         this.category = category;
     }
 
@@ -38,12 +40,16 @@ public class Article {
         return content;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
-    public String getOutlet() {
-        return outlet;
+    public String getOutletName() {
+        return outletName;
+    }
+
+    public String getOutletLogo() {
+        return outletLogo;
     }
 
     public String getCategory() {
@@ -62,12 +68,16 @@ public class Article {
         this.content = content;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    public void setOutlet(String outlet) {
-        this.outlet = outlet;
+    public void setOutletName(String outletName) {
+        this.outletName = outletName;
+    }
+
+    public void setOutletLogo(String outletLogo) {
+        this.outletLogo = outletLogo;
     }
 
     public void setCategory(String category) {

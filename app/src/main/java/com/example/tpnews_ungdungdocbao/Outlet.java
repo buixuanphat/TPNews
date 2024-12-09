@@ -1,17 +1,19 @@
 package com.example.tpnews_ungdungdocbao;
 
+import androidx.annotation.NonNull;
+
 public class Outlet {
    private String id;
    private String name;
-   private String logoLink;
+   private String logo;
 
     public Outlet() {
     }
 
-    public Outlet(String id, String name, String logoLink) {
+    public Outlet(String id, String name, String logo) {
         this.id = id;
         this.name = name;
-        this.logoLink = logoLink;
+        this.logo = logo;
     }
 
     public String getId() {
@@ -22,15 +24,20 @@ public class Outlet {
         return name;
     }
 
-    public String getLogoLink() {
-        return logoLink;
+    public String getLogo() {
+        return logo;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setLogoLink(String logoLink) {
-        this.logoLink = logoLink;
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
     }
 }

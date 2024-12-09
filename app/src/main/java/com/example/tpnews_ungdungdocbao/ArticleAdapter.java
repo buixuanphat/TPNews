@@ -1,6 +1,9 @@
 package com.example.tpnews_ungdungdocbao;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -18,13 +25,11 @@ public class ArticleAdapter extends BaseAdapter {
     Context context;
     int layout;
     ArrayList<Article> arrayList;
-    ArrayList<Outlet> outletList;
 
-    public ArticleAdapter(Context context, int layout, ArrayList<Article> arrayList, ArrayList<Outlet> outletList) {
+    public ArticleAdapter(Context context, int layout, ArrayList<Article> arrayList) {
         this.context = context;
         this.layout = layout;
         this.arrayList = arrayList;
-        this.outletList = outletList;
     }
 
     @Override
@@ -34,12 +39,12 @@ public class ArticleAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return arrayList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
@@ -47,25 +52,31 @@ public class ArticleAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(layout, null);
 
-        ImageView imgvImage = convertView.findViewById(R.id.imgvLayoutArticleImage);
-        Glide.with(context).load(arrayList.get(position).getImageUrl()).into(imgvImage);
-        ImageView imgvLogo = convertView.findViewById(R.id.imgvLayoutOutletImage);
-        String logoLink="";
-        for(Outlet ol : outletList)
-        {
-            if (Objects.equals(ol.getName(), arrayList.get(position).getOutlet()))
-            {
-                logoLink = ol.getLogoLink();
-                break;
-            }
-        }
-        Glide.with(context).load(logoLink).into(imgvLogo);
 
         TextView txtTitle = convertView.findViewById(R.id.txtLayoutArticleTitle);
         txtTitle.setText(arrayList.get(position).getTitle());
         TextView txtDescription = convertView.findViewById(R.id.txtLayoutArticleDescription);
         txtDescription.setText(arrayList.get(position).getDescription());
 
+        ImageView imgvImage = convertView.findViewById(R.id.imgvLayoutArticleImage);
+        String base64Image = arrayList.get(position).getImage();
+        Bitmap bitmap = convertBase64ToBitmap(base64Image);
+        Glide.with(context)
+                .load(bitmap)
+                .apply(RequestOptions.bitmapTransform(new MultiTransformation<>(
+                        new CenterCrop(),
+                        new RoundedCorners(30)))
+                )
+                .into(imgvImage);
+
+        ImageView imgvLogo = convertView.findViewById(R.id.imgvLayoutOutletImage);
+        String base64logo = arrayList.get(position).getOutletLogo();
+        Bitmap bitmapLogo = convertBase64ToBitmap(base64logo);
+        imgvLogo.setImageBitmap(bitmapLogo);
         return convertView;
+    }
+    private Bitmap convertBase64ToBitmap(String base64String) {
+        byte[] decodedBytes = Base64.decode(base64String, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 }
