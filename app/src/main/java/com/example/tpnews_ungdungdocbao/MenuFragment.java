@@ -17,7 +17,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class MenuFragment extends Fragment {
+public class    MenuFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -89,6 +96,18 @@ public class MenuFragment extends Fragment {
 
     ProgressBar progressBar;
 
+
+
+    //Khai báo biến đăng nhập/đăng xuất
+    Button btnAccount, btnLogOut;
+    TextView tvName;
+
+    //Khai báo biến đăng nhập Google
+    GoogleSignInOptions gso;
+    GoogleSignInClient gsc;
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -141,6 +160,48 @@ public class MenuFragment extends Fragment {
             intent.putExtra("outlet", arrlOutlet.get(position).getName());
             intent.putExtra("logo", arrlOutlet.get(position).getLogoLink());
             startActivity(intent);
+        });
+
+
+
+
+
+        //Đâng nhập Google
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(getContext(), gso);
+
+
+        btnAccount = view.findViewById(R.id.btnAccount);
+        btnLogOut = view.findViewById(R.id.btnLogOut);
+        tvName = view.findViewById(R.id.tvName);
+
+
+        btnAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivityForResult(intent, 211);
+                btnAccount.setVisibility(view.INVISIBLE);
+                btnLogOut.setVisibility(view.VISIBLE);
+            }
+        });
+
+
+
+        //Đăng xuất
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(Task<Void> task) {
+                        startActivity(new Intent(getContext(), LoginActivity.class));
+                        Toast.makeText(getContext(), "Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                btnAccount.setVisibility(view.VISIBLE);
+                btnLogOut.setVisibility(view.INVISIBLE);
+            }
         });
 
 
