@@ -1,11 +1,16 @@
 package com.example.tpnews_ungdungdocbao;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -14,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager2 viewPager;
     private BottomNavigationView bottomNavigationView;
+
+    //Lấy dữ liệu
+    UserTPNew userTP;
+    SharedPreferences myPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +51,23 @@ public class MainActivity extends AppCompatActivity {
 
         // Đồng bộ BottomNavigationView và ViewPager
         setupNavigation();
+
+
+
+        //Lấy dữ liệu
+        myPrefs = getSharedPreferences("userTP", MODE_PRIVATE);
+        setInfo();
+        String rsUsername = myPrefs.getString("username", null);
+        int rsActive = myPrefs.getInt("active", 0);
+        userTP = new UserTPNew(rsUsername, "", rsActive);
+//        Toast.makeText(MainActivity.this, String.valueOf("username = " + userTP.getUsername() + " active = " + userTP.getActive()), Toast.LENGTH_SHORT).show();
+
+
+
+        //Truyền dữ liệu
+        if (userTP.getUsername() != null) {
+            transInfo();
+        }
     }
 
     /**
@@ -87,5 +113,32 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+
+    //Lấy dữ liệu
+    public void setInfo() {
+        Intent intent = getIntent();
+        String username = intent.getStringExtra("username");
+        int active = intent.getIntExtra("active", 0);
+        if (username != null) {
+            SharedPreferences.Editor myEdit = myPrefs.edit();
+            myEdit.putString("username", username);
+            myEdit.putInt("active", active);
+            myEdit.commit();
+        }
+    }
+
+
+    //Truyền dữ liệu
+    public void transInfo() {
+        String username = userTP.getUsername();
+        int active = userTP.getActive();
+
+        Intent intent = new Intent();
+        intent.putExtra("username", username);
+        intent.putExtra("active", active);
+        setResult(Activity.RESULT_OK, intent);
     }
 }
