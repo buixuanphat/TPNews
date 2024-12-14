@@ -101,6 +101,7 @@ public class SignInActivity extends AppCompatActivity {
                         intent.putExtra("password", password);
                         intent.putExtra("active", 0);
                         startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(SignInActivity.this, "Tài khoản hoặc mật khẩu không đúng!!", Toast.LENGTH_SHORT).show();
                         edSignInEmail.setText(""); edSignInPassword.setText("");

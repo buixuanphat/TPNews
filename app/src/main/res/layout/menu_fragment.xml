@@ -15,32 +15,30 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnAdmin"
+            android:id="@+id/btnLogOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Admin" />
+            android:text="Đăng xuất"/>
 
         <Button
             android:id="@+id/btnAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đăng nhập"
-            android:visibility="visible" />
+            android:text="Đăng nhập"/>
 
         <Button
-            android:id="@+id/btnLogOut"
+            android:id="@+id/btnAdmin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đăng xuất"
-            android:visibility="invisible"/>
-
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="name"/>
+            android:text="Admin" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="name" />
 
     <Switch
         android:id="@+id/switchDarkMode"

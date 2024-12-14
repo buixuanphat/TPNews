@@ -1,5 +1,6 @@
 package com.example.tpnews_ungdungdocbao;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
     Button googleBtn;
+    String username, email;
 
 
     //Khai báo biến đăng ký Email
@@ -102,19 +104,20 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct != null) {
 
-            String username = acct.getDisplayName();
-            String email = acct.getEmail();
+            username = acct.getDisplayName();
+            email = acct.getEmail();
 
             MyDatabase myDB = new MyDatabase(LoginActivity.this);
             Boolean checkGoogleAccount = myDB.checkUsername(username);
             if (!checkGoogleAccount) {
                 myDB.addUser(username, email, 0);
             }
-
             Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("username", username);
-            setResult(RESULT_OK, resultIntent);
+            finish();
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("username", username);
+            intent.putExtra("active", 1);
+            startActivity(intent);
             finish();
         } else {
             Toast.makeText(LoginActivity.this, "Đăng nhập thất bại!", Toast.LENGTH_SHORT).show();
@@ -141,6 +144,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, SignInActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

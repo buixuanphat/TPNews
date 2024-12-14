@@ -1,11 +1,13 @@
 package com.example.tpnews_ungdungdocbao;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
@@ -33,7 +35,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class    MenuFragment extends Fragment {
+public class MenuFragment extends Fragment {
+
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -106,6 +109,7 @@ public class    MenuFragment extends Fragment {
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
 
+    UserTPNew userTP = new UserTPNew();
 
 
     @Override
@@ -164,6 +168,9 @@ public class    MenuFragment extends Fragment {
 
 
 
+        //Lấy dữ liệu
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        startActivityForResult(intent, 211);
 
 
         //Đâng nhập Google
@@ -176,13 +183,16 @@ public class    MenuFragment extends Fragment {
         tvName = view.findViewById(R.id.tvName);
 
 
+        //Đăng nhập
         btnAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), LoginActivity.class);
-                startActivityForResult(intent, 211);
-                btnAccount.setVisibility(view.INVISIBLE);
-                btnLogOut.setVisibility(view.VISIBLE);
+                if (userTP.getUsername() != null) {
+                    Toast.makeText(getContext(), "Bạn phải đăng xuất!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -195,18 +205,40 @@ public class    MenuFragment extends Fragment {
                 gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(Task<Void> task) {
-                        startActivity(new Intent(getContext(), LoginActivity.class));
-                        Toast.makeText(getContext(), "Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+                        if (userTP.getUsername() == null) {
+                            Toast.makeText(getContext(), "Bạn chưa đăng nhập!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            startActivity(new Intent(getContext(), LoginActivity.class));
+                            userTP = new UserTPNew(null, "", 0);
+                            tvName.setText(userTP.getUsername());
+                            btnAdmin.setVisibility(View.INVISIBLE);
+                            Toast.makeText(getContext(), "Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
-                btnAccount.setVisibility(view.VISIBLE);
-                btnLogOut.setVisibility(view.INVISIBLE);
             }
         });
 
 
-
-
         return view;
+    }
+
+    //Lấy dữ liệu
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 211 && resultCode == Activity.RESULT_OK) {
+            String username = data.getStringExtra("username");
+            int active = data.getIntExtra("active", 0);
+            userTP = new UserTPNew(username, "", active);
+            tvName.setText(userTP.getUsername());
+            if (userTP.getActive() == 1) {
+                btnAdmin.setVisibility(View.VISIBLE);
+            } else {
+                btnAdmin.setVisibility(View.INVISIBLE);
+            }
+//            Toast.makeText(getContext(), String.valueOf("Menu username = " + userTP.getUsername() + " active = " + userTP.getActive()), Toast.LENGTH_SHORT).show();
+        }
     }
 }
