@@ -21,6 +21,8 @@ public class AdminFragmentAdapter extends FragmentStateAdapter {
                 return new QuanLyDanhMucFragment();
             case 2:
                 return new QuanLyTrangBaoFragment();
+            case 3:
+                return new QuanLyUserFragment();
             default:
                 return new QuanLyBaiBaoFragment();
         }
@@ -28,6 +30,6 @@ public class AdminFragmentAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3; // 3 tabs in total
+        return 4;
     }
 }

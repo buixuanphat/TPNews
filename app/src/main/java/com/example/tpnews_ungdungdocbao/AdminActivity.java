@@ -38,6 +38,9 @@ public class AdminActivity extends AppCompatActivity {
                 case 2:
                     tab.setText("Đầu báo");
                     break;
+                case 3:
+                    tab.setText("User");
+                    break;
             }
         }).attach();
 
