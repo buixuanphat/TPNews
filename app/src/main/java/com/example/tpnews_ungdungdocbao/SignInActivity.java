@@ -27,7 +27,6 @@ public class SignInActivity extends AppCompatActivity {
     ImageView imgHideSignInPassword;
     boolean isPasswordVisible = false;
 
-
     //Đọc dữ liệu
     MyDatabase myDB;
 
@@ -99,7 +98,7 @@ public class SignInActivity extends AppCompatActivity {
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                         intent.putExtra("username", username);
                         intent.putExtra("password", password);
-                        intent.putExtra("active", 0);
+                        intent.putExtra("active", myDB.getActive(username));
                         startActivity(intent);
                         finish();
                     } else {

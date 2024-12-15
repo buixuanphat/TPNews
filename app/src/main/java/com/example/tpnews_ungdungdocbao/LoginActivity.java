@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
             MyDatabase myDB = new MyDatabase(LoginActivity.this);
             Boolean checkGoogleAccount = myDB.checkUsername(username);
             if (!checkGoogleAccount) {
-                myDB.addUser(username, email, 0);
+                myDB.addUser(username, email, 1);
             }
             Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
             finish();
