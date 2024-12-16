@@ -144,6 +144,7 @@ public class QuanLyTrangBaoFragment extends Fragment {
                     btnSave.setVisibility(View.VISIBLE);
                     btnCancel.setVisibility(View.VISIBLE);
                     btnAddImage.setVisibility(View.VISIBLE);
+                    imgInputImage.setVisibility(View.VISIBLE);
 
                     // Hiển thị dữ liệu trang báo được chọn
                     Outlet outletSelected = arrlOutlet.get(position);

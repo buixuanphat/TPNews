@@ -36,7 +36,7 @@ public class AdminActivity extends AppCompatActivity {
                     tab.setText("Danh mục");
                     break;
                 case 2:
-                    tab.setText("Đầu báo");
+                    tab.setText("Trang báo");
                     break;
                 case 3:
                     tab.setText("User");

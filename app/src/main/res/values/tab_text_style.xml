@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Style cho tab -->
+    <style name="TabTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">18sp</item> <!-- Đặt kích thước chữ cho tab -->
+        <item name="android:fontFamily">@font/roboto_bold</item> <!-- Đặt màu chữ cho tab -->
+    </style>
+</resources>

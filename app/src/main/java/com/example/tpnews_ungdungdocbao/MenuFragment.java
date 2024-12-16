@@ -126,9 +126,11 @@ public class MenuFragment extends Fragment {
         if (isDarkMode)
         {
             switchDarkMode.setChecked(true);
+            switchDarkMode.setText("Tối");
         }
         else if (!isDarkMode){
             switchDarkMode.setChecked(false);
+            switchDarkMode.setText("Sáng");
         }
 
         // Lắng nghe thay đổi trạng thái của switch và lưu vào SharedPreferences

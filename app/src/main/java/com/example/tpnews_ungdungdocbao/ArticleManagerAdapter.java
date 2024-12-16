@@ -12,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -54,7 +58,14 @@ public class ArticleManagerAdapter extends BaseAdapter {
 
         String base64Image = arrayList.get(position).getImage();
         Bitmap bitmap = convertBase64ToBitmap(base64Image);
-        logo.setImageBitmap(bitmap);
+      //  logo.setImageBitmap(bitmap);
+        Glide.with(context)
+                .load(bitmap)
+                .apply(RequestOptions.bitmapTransform(new MultiTransformation<>(
+                        new CenterCrop(),
+                        new RoundedCorners(30)))
+                )
+                .into(logo);
 
         return convertView;
     }

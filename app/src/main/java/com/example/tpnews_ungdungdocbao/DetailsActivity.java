@@ -195,11 +195,12 @@ public class DetailsActivity extends AppCompatActivity {
         } else if ("rift".equals(font)) {
             typeface = ResourcesCompat.getFont(this, R.font.rift);
         } else if ("sfu".equals(font)) {
-            typeface = ResourcesCompat.getFont(this, R.font.sfu);
+            typeface = ResourcesCompat.getFont(this, R.font.bookerly);
         }
 
         if (typeface != null) {
             txtContent.setTypeface(typeface);
+            txtDescription.setTypeface(typeface);
         }
     }
 

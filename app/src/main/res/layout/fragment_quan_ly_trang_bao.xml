@@ -7,11 +7,52 @@
     android:orientation="vertical"
     tools:context=".QuanLyTrangBaoFragment">
 
-        <Button
-            android:id="@+id/btnAddOutlet"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Thêm trang báo" />
+            android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnAddOutlet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Thêm trang báo"
+                    android:textSize="18dp"
+                    android:layout_margin="10dp"/>
+
+                <Button
+                    android:id="@+id/btnLogoOutlet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Chọn ảnh"
+                    android:textSize="18dp"
+                    android:visibility="gone"
+                    android:layout_margin="10dp"/>
+
+                <Button
+                    android:id="@+id/btnSaveOutlet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#35A52A"
+                    android:padding="10dp"
+                    android:text="Lưu"
+                    android:textSize="18dp"
+                    android:visibility="gone"
+                    android:layout_margin="10dp"/>
+
+                <Button
+                    android:id="@+id/btnCancelOutlet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#C70808"
+                    android:padding="10dp"
+                    android:text="Hủy"
+                    android:textSize="18dp"
+                    android:visibility="gone"
+                    android:layout_margin="10dp"/>
+        </LinearLayout>
 
         <EditText
             android:id="@+id/edtInputOutlet"
@@ -20,34 +61,15 @@
             android:ems="10"
             android:hint="Tên trang báo"
             android:inputType="text"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:background="@color/white"
+            android:padding="10dp"/>
 
         <ImageView
             android:id="@+id/imgvLogoOutlet"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="100dp"
             android:scaleType="centerCrop"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/btnLogoOutlet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Chọn ảnh"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/btnSaveOutlet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Lưu"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/btnCancelOutlet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Hủy"
             android:visibility="gone" />
 
         <FrameLayout

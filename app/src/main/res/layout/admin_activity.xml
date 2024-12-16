@@ -24,8 +24,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Quản lý ứng dụng"
-            android:textSize="22sp"
-            android:gravity="center"/>
+            android:textSize="25sp"
+            android:gravity="center"
+            android:fontFamily="@font/roboto_bold"/>
     </LinearLayout>
 
     <!-- Customized TabLayout -->
@@ -37,7 +38,9 @@
         app:tabTextColor="@color/black"
         app:tabMode="scrollable"
         app:tabGravity="center"
-        app:tabIndicatorColor="@color/tab_selected_color"/>
+        app:tabIndicatorColor="@color/tab_selected_color"
+        app:tabTextAppearance="@style/TabTextStyle"
+        />
 
     <!-- Content Area -->
     <androidx.viewpager2.widget.ViewPager2

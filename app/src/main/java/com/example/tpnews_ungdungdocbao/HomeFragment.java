@@ -57,12 +57,14 @@ public class HomeFragment extends Fragment {
         networkReceiver = new NetworkReceiver(new NetworkReceiver.NetworkListener() {
             @Override
             public void onNetworkAvailable() {
+                scrollView.setVisibility(View.VISIBLE);
                 loadCategories();
                 saveArticlesForOffline();
             }
 
             @Override
             public void onNetworkLost() {
+                scrollView.setVisibility(View.GONE);
                 Toast.makeText(requireContext(), "Mất kết nối Internet", Toast.LENGTH_SHORT).show();
                 loadArticlesFromLocal();
             }
@@ -129,7 +131,7 @@ public class HomeFragment extends Fragment {
         textView.setText(category.getName());
         textView.setTextColor(Color.GRAY);
         textView.setTextSize(20);
-        textView.setPadding(20, 10, 20, 10);
+        textView.setPadding(30, 10, 30, 10);
         Typeface typeface = ResourcesCompat.getFont(requireContext(), R.font.roboto_medium);
         textView.setTypeface(typeface != null ? typeface : Typeface.DEFAULT);
         return textView;
@@ -146,6 +148,7 @@ public class HomeFragment extends Fragment {
         int scrollToX = (int) (textView.getX() + textView.getWidth() / 2 - scrollView.getWidth() / 2);
         scrollView.smoothScrollTo(scrollToX, 0);
         articles.clear();
+        //articleAdapter.notifyDataSetChanged();
         loadArticlesByCategory(category.getName());
     }
 
@@ -182,12 +185,10 @@ public class HomeFragment extends Fragment {
 
     // Cập nhật danh sách bài viết
     private void updateArticleList() {
-        if (articleAdapter == null) {
+
             articleAdapter = new ArticleAdapter(requireContext(), R.layout.layout_article, articles);
             lvArticle.setAdapter(articleAdapter);
-        } else {
-            articleAdapter.notifyDataSetChanged();
-        }
+
 
         lvArticle.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(requireContext(), DetailsActivity.class);

@@ -7,32 +7,73 @@
     android:orientation="vertical"
     tools:context=".QuanLyBaiBaoFragment">
 
-    <Button
-        android:id="@+id/btnAddContent"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Thêm bài báo" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btnUpdateArticle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cập nhật"
-        android:visibility="gone"/>
+        <Button
+            android:id="@+id/btnAddContent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Thêm bài báo"
+            android:textSize="18dp" />
 
-    <Button
-        android:id="@+id/btnSaveContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Lưu"
-        android:visibility="gone"/>
 
-    <Button
-        android:id="@+id/btnCancelContent"
+        <Button
+            android:id="@+id/btnAddImageNews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Thêm ảnh"
+            android:textSize="18dp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnUpdateArticle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Lưu"
+            android:textSize="18dp"
+            android:visibility="gone"
+            android:backgroundTint="#35A52A"/>
+
+        <Button
+            android:id="@+id/btnSaveContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:backgroundTint="#35A52A"
+            android:text="Lưu"
+            android:textSize="18dp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnCancelContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:backgroundTint="#C70808"
+            android:text="Hủy"
+            android:textSize="18dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/spCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hủy"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
+    <Spinner
+        android:id="@+id/spOutlet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -49,52 +90,40 @@
                 android:id="@+id/edtInputTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
                 android:hint="Tiêu đề "
                 android:inputType="textMultiLine"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="@color/white"
+                android:textSize="18dp"
+                android:padding="10dp"
+                android:fontFamily="@font/titlefont"/>
 
             <EditText
                 android:id="@+id/edtInputDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
                 android:hint="Mô tả"
                 android:inputType="textMultiLine"
-                android:visibility="gone"/>
-
-            <Button
-                android:id="@+id/btnAddImageNews"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Thêm hình ảnh"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:padding="10dp"
+                android:background="@color/white"/>
 
             <ImageButton
                 android:id="@+id/imgInputImageNews"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="250dp"
+                android:scaleType="centerCrop"
                 android:visibility="gone"/>
             <EditText
                 android:id="@+id/edtInputContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
-                android:visibility="gone"/>
-            <Spinner
-                android:id="@+id/spCategory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
-
-            <Spinner
-                android:id="@+id/spOutlet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
-
+                android:visibility="gone"
+                android:background="@color/white"
+                android:padding="10dp"
+                android:hint="Nội dung"/>
 
 
         </LinearLayout>

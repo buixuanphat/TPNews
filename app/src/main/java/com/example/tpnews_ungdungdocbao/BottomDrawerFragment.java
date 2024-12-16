@@ -20,7 +20,7 @@ public class BottomDrawerFragment extends BottomSheetDialogFragment {
     private TextView textView, andes, serif, rift, sfu;
 
     // Các giá trị cỡ chữ cố định
-    private static final int[] FONT_SIZES = {12, 16, 20, 24, 28, 32, 36};
+    private static final int[] FONT_SIZES = {15, 19, 23, 27, 31, 35, 39};
 
     @Nullable
     @Override
@@ -40,8 +40,37 @@ public class BottomDrawerFragment extends BottomSheetDialogFragment {
 
         // Lấy giá trị cỡ chữ lưu trữ và thiết lập ban đầu
         int savedFontSize = preferences.getInt("size", FONT_SIZES[1]); // Mặc định là 16
-        textView.setTextSize(savedFontSize); // Cập nhật cỡ chữ ban đầu
-        textView.setText("Cỡ chữ: " + savedFontSize + "sp");
+        switch (savedFontSize)
+            {
+                case (15): {
+                    textView.setText("Cỡ chữ: Tiny");
+                    break;
+                }
+                case (19): {
+                    textView.setText("Cỡ chữ: Small");
+                    break;
+                }
+                case (23): {
+                    textView.setText("Cỡ chữ: Medium");
+                    break;
+                }
+                case (27): {
+                    textView.setText("Cỡ chữ: Large");
+                    break;
+                }
+                case (31): {
+                    textView.setText("Cỡ chữ: Extra Large");
+                    break;
+                }
+                case (35): {
+                    textView.setText("Cỡ chữ: Huge");
+                    break;
+                }
+                case (39): {
+                    textView.setText("Cỡ chữ: Super Huge");
+                    break;
+                }
+            }
 
         // Tìm vị trí của cỡ chữ đã lưu trong mảng FONT_SIZES
         int savedProgress = 0;
@@ -61,8 +90,37 @@ public class BottomDrawerFragment extends BottomSheetDialogFragment {
                 int fontSize = FONT_SIZES[progress];
 
                 // Cập nhật TextView
-                textView.setTextSize(fontSize);
-                textView.setText("Cỡ chữ: " + fontSize + "sp");
+                switch (fontSize)
+                {
+                    case (15): {
+                        textView.setText("Cỡ chữ: Tiny");
+                        break;
+                    }
+                    case (19): {
+                        textView.setText("Cỡ chữ: Small");
+                        break;
+                    }
+                    case (23): {
+                        textView.setText("Cỡ chữ: Medium");
+                        break;
+                    }
+                    case (27): {
+                        textView.setText("Cỡ chữ: Large");
+                        break;
+                    }
+                    case (31): {
+                        textView.setText("Cỡ chữ: Extra Large");
+                        break;
+                    }
+                    case (35): {
+                        textView.setText("Cỡ chữ: Huge");
+                        break;
+                    }
+                    case (39): {
+                        textView.setText("Cỡ chữ: Super Huge");
+                        break;
+                    }
+                }
 
                 // Lưu giá trị vào SharedPreferences
                 editor.putInt("size", fontSize);

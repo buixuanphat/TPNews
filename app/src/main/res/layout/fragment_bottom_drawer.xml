@@ -11,29 +11,39 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cỡ chữ" />
+        android:text="Cỡ chữ: "
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:paddingBottom="8dp"/>
 
     <SeekBar
         android:id="@+id/seekBar"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:max="10"
-        android:progress="3" />
+        android:layout_height="wrap_content" />
 
+
+    <!-- Title for Font Selection -->
     <TextView
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Font chữ" />
+        android:text="Font Style"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:paddingBottom="8dp"/>
 
+    <!-- Table for Font Styles -->
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        android:paddingBottom="16dp">
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/andes"
@@ -41,7 +51,9 @@
                 android:layout_height="wrap_content"
                 android:text="Andes"
                 android:fontFamily="@font/andes"
-                android:textSize="20dp"/>
+                android:textSize="20sp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/serif"
@@ -49,12 +61,13 @@
                 android:layout_height="wrap_content"
                 android:text="Serif"
                 android:fontFamily="@font/serif"
-                android:textSize="20dp"/>
+                android:textSize="20sp"
+                android:textColor="@color/black" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/rift"
@@ -62,15 +75,18 @@
                 android:layout_height="wrap_content"
                 android:text="Rift"
                 android:fontFamily="@font/rift"
-                android:textSize="20dp"/>
+                android:textSize="20sp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/sfu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SFU"
-                android:fontFamily="@font/sfu"
-                android:textSize="20dp"/>
+                android:fontFamily="@font/bookerly"
+                android:text="Bookerly"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
         </TableRow>
 
     </TableLayout>

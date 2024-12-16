@@ -145,6 +145,7 @@ public class QuanLyBaiBaoFragment extends Fragment {
             edtInputContent.setVisibility(View.VISIBLE);
             spCategory.setVisibility(View.VISIBLE);
             spOutlet.setVisibility(View.VISIBLE);
+            lvArticle.setVisibility(View.GONE);
         });
 
         // Mở Intent chọn hình ảnh từ thiết bị
@@ -209,6 +210,7 @@ public class QuanLyBaiBaoFragment extends Fragment {
                 spCategory.setVisibility(View.VISIBLE);
                 spOutlet.setVisibility(View.VISIBLE);
                 imgInputImage.setVisibility(View.VISIBLE);
+                lvArticle.setVisibility(View.GONE);
 
                 // Hiển thị dữ liệu bài báo được chọn
                 Article selectedArticle = arrlArticle.get(position);
@@ -385,6 +387,7 @@ public class QuanLyBaiBaoFragment extends Fragment {
         spCategory.setVisibility(View.GONE);
         spOutlet.setVisibility(View.GONE);
         imgInputImage.setVisibility(View.GONE);
+        lvArticle.setVisibility(View.VISIBLE);
         edtInputTitle.setText("");
         edtInputDescription.setText("");
         edtInputContent.setText("");

@@ -9,26 +9,35 @@
     android:padding="15dp"
     tools:context=".DetailsActivity">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imgvDetailOutlet"
             android:layout_width="150dp"
             android:layout_height="50dp"
-            android:background="@null" />
+            android:background="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_weight="1"
+            android:layout_marginStart="182dp"
             android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/font_size" />
-    </LinearLayout>
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgvDetailOutlet"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/font_size"
+            android:paddingTop="5dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -44,13 +53,15 @@
                 android:id="@+id/txtDetailTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/titlefont" />
+                android:fontFamily="@font/titlefont"
+                android:justificationMode="inter_word"/>
 
             <TextView
                 android:id="@+id/txtDetailDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:justificationMode="inter_word"/>
 
             <ImageView
                 android:id="@+id/imgvDetailImage"
@@ -63,7 +74,8 @@
                 android:id="@+id/txtDetailContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:justificationMode="inter_word"/>
         </LinearLayout>
     </ScrollView>
 

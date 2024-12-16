@@ -7,12 +7,36 @@
     tools:context=".QuanLyDanhMucFragment">
 
 
-
-    <Button
-        android:id="@+id/btnAddCat"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Thêm danh mục" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnAddCat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thêm danh mục"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/btnSaveCat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lưu "
+            android:visibility="gone"
+            android:backgroundTint="#35A52A"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/btnCancelCat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hủy"
+            android:visibility="gone"
+            android:backgroundTint="#C70808"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
 
     <EditText
         android:id="@+id/edtInputCat"
@@ -21,23 +45,12 @@
         android:ems="10"
         android:hint="Tên danh mục"
         android:inputType="text"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:background="@color/white"
+        android:textSize="18dp"
+        android:padding="10dp"/>
 
-    <Button
-        android:id="@+id/btnSaveCat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Lưu "
-        android:visibility="gone" />
-
-    <Button
-        android:id="@+id/btnCancelCat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hủy"
-        android:visibility="gone" />
-
-        <FrameLayout
+    <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
