@@ -17,7 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 public class BottomDrawerFragment extends BottomSheetDialogFragment {
 
     private SeekBar seekBar;
-    private TextView textView;
+    private TextView textView, andes, serif, rift, sfu;
 
     // Các giá trị cỡ chữ cố định
     private static final int[] FONT_SIZES = {12, 16, 20, 24, 28, 32, 36};
@@ -77,6 +77,46 @@ public class BottomDrawerFragment extends BottomSheetDialogFragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // Không làm gì ở đây
+            }
+        });
+
+
+        SharedPreferences preferencesFont = getActivity().getSharedPreferences("Font", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editorFont = preferencesFont.edit();
+        andes = view.findViewById(R.id.andes);
+        serif = view.findViewById(R.id.serif);
+        rift = view.findViewById(R.id.rift);
+        sfu = view.findViewById(R.id.sfu);
+
+        andes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editorFont.putString("font", "andes");
+                editorFont.apply(); // Chuyển từ commit() sang apply()
+            }
+        });
+
+        serif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editorFont.putString("font", "serif");
+                editorFont.apply();
+            }
+        });
+
+        rift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editorFont.putString("font", "rift");
+                editorFont.apply();
+            }
+        });
+
+        sfu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editorFont.putString("font", "sfu");
+                editorFont.apply();
             }
         });
 

@@ -20,4 +20,58 @@
         android:layout_height="wrap_content"
         android:max="10"
         android:progress="3" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Font chữ" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/andes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Andes"
+                android:fontFamily="@font/andes"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Serif"
+                android:fontFamily="@font/serif"
+                android:textSize="20dp"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/rift"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rift"
+                android:fontFamily="@font/rift"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/sfu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SFU"
+                android:fontFamily="@font/sfu"
+                android:textSize="20dp"/>
+        </TableRow>
+
+    </TableLayout>
 </LinearLayout>
