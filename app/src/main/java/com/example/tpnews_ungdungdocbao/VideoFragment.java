@@ -69,23 +69,53 @@ public class VideoFragment extends Fragment {
 
         List<VideoItem> videoItems = new ArrayList<>();
 
-        VideoItem videoItemKidsai = new VideoItem();
-        videoItemKidsai.videoURL = "https://res.cloudinary.com/dq1oo3fod/video/upload/v1731379824/khi_gh%E1%BB%87_b%E1%BA%A1n_%C4%91i_ch%C6%A1i_v%E1%BB%9Bi_th%E1%BA%B1ng_kh%C3%A1c_kidsai_dangrangto_talagi_jjgw0o.mp4";
-        videoItemKidsai.videoTitle = "TALAGI";
-        videoItemKidsai.VideoDescription = "Kidsai và Dangrangto cháy hết mình cùng con beat mới!!!";
-        videoItems.add(videoItemKidsai);
+        VideoItem baoLaoDong = new VideoItem();
+        baoLaoDong.videoURL = "https://res.cloudinary.com/dq1oo3fod/video/upload/v1734314671/%C4%90%C3%A3_m%E1%BA%AFt_v%E1%BB%9Bi_c%E1%BA%A3nh_drift_si%C3%AAu_xe_%C3%B4t%C3%B4_%C4%91i%C3%AAu_luy%E1%BB%87n___B%C3%A1o_Lao_%C4%90%E1%BB%99ng_shorts_tydi38.mp4";
+        baoLaoDong.videoTitle = "Báo Lao Động";
+        baoLaoDong.VideoDescription = "Ngày hội sự kiện ra mắt các siêu xe";
+        videoItems.add(baoLaoDong);
 
-        VideoItem videoItemDangRangTo = new VideoItem();
-        videoItemDangRangTo.videoURL = "https://res.cloudinary.com/dq1oo3fod/video/upload/v1731379997/Dangrangto_aka_tr%E1%BA%A7n_l%C3%A0_l%C6%B0%E1%BB%9Bt_rap_live_ng%E1%BB%B1a_%C3%B4_dangrangto_rapviet_rap_raplive_bangdianhacmaithuy_em7mll.mp4";
-        videoItemDangRangTo.videoTitle = "Ngựa Ô";
-        videoItemDangRangTo.VideoDescription = "DangRangTo live Ngựa Ô cực chất!!!";
-        videoItems.add(videoItemDangRangTo);
+        VideoItem tinNongYTe = new VideoItem();
+        tinNongYTe.videoURL = "https://res.cloudinary.com/dq1oo3fod/video/upload/v1734314673/Tin_n%C3%B3ng_y_t%E1%BA%BF_12_12__17_tr%E1%BA%BB_em_%E1%BB%9F_Mexico_t%E1%BB%AD_vong_do_nhi%E1%BB%85m_vi_khu%E1%BA%A9n_t%E1%BB%AB_t%C3%BAi_truy%E1%BB%81n_d%E1%BB%8Bch___SK%C4%90S_shorts_tov8i5.mp4";
+        tinNongYTe.videoTitle = "Tin Nóng Y Tế 24h";
+        tinNongYTe.VideoDescription = "Tử vong vì nhiễm khuẩn lạ";
+        videoItems.add(tinNongYTe);
 
-        VideoItem videoItemLeftHand = new VideoItem();
-        videoItemLeftHand.videoURL = "https://res.cloudinary.com/dq1oo3fod/video/upload/v1731380213/Ch%C6%B0a_%C4%91%E1%BB%81u_tay_l%E1%BA%AFm_c%E1%BA%A3_nh%C3%A0_th%E1%BB%A9_l%E1%BB%97i_vcclefthand_dangrangto_bigdaddy_rapvietmua4_linhanh_fyp_xg8zfj.mp4";
-        videoItemLeftHand.videoTitle = "Phi Tiêu";
-        videoItemLeftHand.VideoDescription = "LeftHand nhảy bài mới cùng bạn gái!!!";
-        videoItems.add(videoItemLeftHand);
+        VideoItem BaMuoisNong = new VideoItem();
+        BaMuoisNong.videoURL = "https://res.cloudinary.com/dq1oo3fod/video/upload/v1734314672/30s_N%C3%B3ng___K%E1%BA%BFt_lu%E1%BA%ADn_%C4%91i%E1%BB%81u_tra_v%E1%BB%A5_d%E1%BB%B1_%C3%A1n_%C4%90%E1%BA%A1i_Ninh_w8gx4f.mp4";
+        BaMuoisNong.videoTitle = "30s Nóng";
+        BaMuoisNong.VideoDescription = "Kết luận điều tra vụ án tại Đại Ninh";
+        videoItems.add(BaMuoisNong);
+
+        VideoItem BaMuoisNong_mot = new VideoItem();
+        BaMuoisNong_mot.videoURL = "https://res.cloudinary.com/dq1oo3fod/video/upload/v1734314671/Th%E1%BB%9Di_ti%E1%BA%BFt_B%E1%BA%AFc_b%E1%BB%99_%C4%90%C3%AAm_nay_v%C3%A0_Ng%C3%A0y_mai_1_9___Truy%E1%BB%81n_H%C3%ACnh_Nh%C3%A2n_D%C3%A2n_pwy14d.mp4";
+        BaMuoisNong_mot.videoTitle = "30s Nóng";
+        BaMuoisNong_mot.VideoDescription = "Thời tiết Bắc Bộ đêm nay và ngày mai";
+        videoItems.add(BaMuoisNong_mot);
+
+        VideoItem baoLaoDong_mot = new VideoItem();
+        baoLaoDong_mot.videoURL = "https://res.cloudinary.com/dq1oo3fod/video/upload/v1734314671/Ca_s%C4%A9_Ho%C3%A0_Minzy_c%E1%BB%95_v%C5%A9_tr%E1%BA%ADn_C%C3%B4ng_an_H%C3%A0_N%E1%BB%99i_v%C3%A0_B%C3%ACnh_%C4%90%E1%BB%8Bnh___B%C3%A1o_Lao_%C4%90%E1%BB%99ng_shorts_nvmskm.mp4";
+        baoLaoDong_mot.videoTitle = "Báo Lao Động";
+        baoLaoDong_mot.VideoDescription = "Chung kết thể thao bóng đá quốc gia";
+        videoItems.add(baoLaoDong_mot);
+
+        VideoItem BaMuoisNong_hai = new VideoItem();
+        BaMuoisNong_hai.videoURL = "https://res.cloudinary.com/dq1oo3fod/video/upload/v1734314670/D%E1%BB%B1_b%C3%A1o_th%E1%BB%9Di_ti%E1%BA%BFt_Nam_B%E1%BB%99_v%C3%A0_T%C3%A2y_Nguy%C3%AAn_h%C3%B4m_nay_6_9___Truy%E1%BB%81n_H%C3%ACnh_Nh%C3%A2n_D%C3%A2n_ggss1z.mp4";
+        BaMuoisNong_hai.videoTitle = "30s Nóng";
+        BaMuoisNong_hai.VideoDescription = "Thời tiết Nam Bộ đêm nay và ngày mai";
+        videoItems.add(BaMuoisNong_hai);
+
+        VideoItem BaMuoisNong_ba = new VideoItem();
+        BaMuoisNong_ba.videoURL = "https://res.cloudinary.com/dq1oo3fod/video/upload/v1734314671/30s_N%C3%B3ng___Xe_t%E1%BA%A3i_t%C3%B4ng_%C4%91u%C3%B4i_%C3%B4_t%C3%B4_r%E1%BB%93i_lao_v%C3%A0o_cabin_tr%E1%BA%A1m_thu_ph%C3%AD_%E1%BB%9F_Kh%C3%A1nh_H%C3%B2a_hi3r7b.mp4";
+        BaMuoisNong_ba.videoTitle = "30s Nóng";
+        BaMuoisNong_ba.VideoDescription = "Tai nạn thu phí Khánh Hòa";
+        videoItems.add(BaMuoisNong_ba);
+
+        VideoItem baoTuoiTre = new VideoItem();
+        baoTuoiTre.videoURL = "https://res.cloudinary.com/dq1oo3fod/video/upload/v1734314670/30s_N%C3%B3ng__C%C3%B4_g%C3%A1i_t%E1%BB%AD_vong_d%C6%B0%E1%BB%9Bi_b%C3%A1nh_xe_b%E1%BB%93n_b%C3%AA_t%C3%B4ng_demw0g.mp4";
+        baoTuoiTre.videoTitle = "Báo Tuổi Trẻ";
+        baoTuoiTre.VideoDescription = "Tử vong dưới bánh xe bồn bê tông";
+        videoItems.add(baoTuoiTre);
 
         videoViewPager.setAdapter(new VideoAdapter(videoItems));
 
