@@ -40,6 +40,8 @@ public class MyDatabase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+
+    //Thêm user
     public void addUser(String username, String password, int active) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -55,17 +57,15 @@ public class MyDatabase extends SQLiteOpenHelper {
 
     }
 
-//    Cursor readAllData() {
-//        String query = "SELECT * FROM " + TABLE_NAME;
-//        SQLiteDatabase db = this.getReadableDatabase();
-//
-//        Cursor cursor = null;
-//        if (db != null) {
-//            db.rawQuery(query, null);
-//        }
-//        return cursor;
-//    }
 
+    //Đọc hết dữ liệu
+    public Cursor readAllUser() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+    }
+
+
+    //Kiểm tra user tồn tại
     public Boolean checkUsername(String username) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         Cursor cursor = MyDB.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_USERNAME + " = ?", new String[] {username});
@@ -76,6 +76,8 @@ public class MyDatabase extends SQLiteOpenHelper {
         }
     }
 
+
+    //Kiểm tra thông tin user
     public Boolean checkUsernamePassword(String username, String password) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         Cursor cursor = MyDB.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_USERNAME + " = ? and " + COLUMN_PASSWORD + " = ?", new String[] {username, password});
@@ -84,5 +86,46 @@ public class MyDatabase extends SQLiteOpenHelper {
         } else {
             return false;
         }
+    }
+
+
+    //Lấy active để đăng nhập
+    public int getActive(String logUsername) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int active = 0;
+
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_USERNAME + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{logUsername});
+
+        if (cursor != null && cursor.moveToFirst()) {
+            active = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ADMIN));
+            cursor.close();
+        }
+        db.close();
+        return active;
+    }
+
+    //Xóa user
+    public boolean deleteUser(String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result = db.delete(TABLE_NAME, "username = ?", new String[]{username});
+        db.close();
+        return result > 0;
+    }
+
+    //Sửa user
+    public boolean updateUser(String username, String newPassword, Integer newActive) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        if (newPassword != null) {
+            values.put(COLUMN_PASSWORD, newPassword);
+        }
+        if (newActive != null) {
+            values.put(COLUMN_ADMIN, newActive);
+        }
+
+        int newUser = db.update(TABLE_NAME, values, COLUMN_USERNAME + " = ?", new String[]{username});
+        return newUser > 0;
     }
 }
