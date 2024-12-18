@@ -9,7 +9,7 @@
     android:orientation="vertical"
     
     android:padding="16dp"
-    tools:context=".AdminActivity">
+    tools:context=".Views.AdminActivity">
 
     <!-- Header with Title and Icon -->
     <LinearLayout

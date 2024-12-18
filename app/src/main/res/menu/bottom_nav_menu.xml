@@ -4,10 +4,6 @@
         android:icon="@drawable/home"
         android:title="Trang chủ" />
     <item
-        android:id="@+id/nav_trend"
-        android:icon="@drawable/trend"
-        android:title="Xu hướng" />
-    <item
         android:id="@+id/nav_video"
         android:icon="@drawable/video"
         android:title="Video" />
