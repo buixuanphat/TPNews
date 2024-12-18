@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.tpnews_ungdungdocbao.Data.Static;
 import com.example.tpnews_ungdungdocbao.Models.Outlet;
 import com.example.tpnews_ungdungdocbao.R;
 import com.google.firebase.database.DataSnapshot;
@@ -56,7 +57,7 @@ public class QuanLyTrangBaoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        load();
+        Outlet.loadOutlet(myFireBaseDB, arrlOutlet, outletAdapter, progressBar);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class QuanLyTrangBaoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_quan_ly_trang_bao, container, false);
 
-        // Khởi tạo view
+        // Ánh xạ giao diện
         edtInput = view.findViewById(R.id.edtInputOutlet);
         progressBar = view.findViewById(R.id.progressBarOutlet);
         myFireBaseDB = FirebaseDatabase.getInstance().getReference();
@@ -75,20 +76,16 @@ public class QuanLyTrangBaoFragment extends Fragment {
         imgInputImage = view.findViewById(R.id.imgvLogoOutlet);
         lv = view.findViewById(R.id.lvOutlet);
 
-        // Khởi tạo danh sách trang báo
+        // Khởi tạo listview
         arrlOutlet = new ArrayList<>();
         outletAdapter = new OutletAdapter(getContext(), R.layout.layout_outlet, arrlOutlet);
         lv.setAdapter(outletAdapter);
 
-        // Xử lý nút thêm bài viết
+        // Thêm bài viết
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnAdd.setVisibility(View.GONE);
-                edtInput.setVisibility(View.VISIBLE);
-                btnSave.setVisibility(View.VISIBLE);
-                btnCancel.setVisibility(View.VISIBLE);
-                btnAddImage.setVisibility(View.VISIBLE);
+               appearForm();
             }
         });
 
@@ -98,141 +95,65 @@ public class QuanLyTrangBaoFragment extends Fragment {
             startActivityForResult(intent, 504);
         });
 
-        // Xử lý nút lưu
+        // Lưu bài viết
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (edtInput.getText().toString().isEmpty()) {
+                if (edtInput.getText().toString().isEmpty())
+                {
                     Toast.makeText(getContext(), "Vui lòng nhập tên trang báo", Toast.LENGTH_SHORT).show();
-                } else if (imageURI == null) {
+                }
+                else if (imageURI == null)
+                {
                     Toast.makeText(getContext(), "Vui lòng chọn hình ảnh!", Toast.LENGTH_SHORT).show();
-                } else {
-                    try {
-                        String key = myFireBaseDB.child("Outlet").push().getKey();
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), imageURI);
-                        Outlet outlet = new Outlet(key, edtInput.getText().toString(), convertBitmapToBase64(bitmap));
-                        myFireBaseDB.child("Outlet").child(key).setValue(outlet, (error, ref) -> {
-                            if (error == null) {
-                                resetForm();
-                                load();
-                                Toast.makeText(getContext(), "Lưu trang báo thành công", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(requireContext(), "Lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                }
+                else
+                {
+                    Outlet.addOutlet(myFireBaseDB, edtInput, imageURI, getContext());
+                    Outlet.loadOutlet(myFireBaseDB, arrlOutlet, outletAdapter, progressBar);
+                    hideForm();
                 }
             }
         });
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resetForm();
+                hideForm();
             }
         });
+        // Xử lý sự kiện khi item được chọn
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Thông báo");
                 builder.setMessage("Bạn muốn thực hiện hành động nào");
-
                 builder.setPositiveButton("Sửa", (dialog, which) -> {
-                    // Hiển thị các thành phần nhập liệu
-                    btnAdd.setVisibility(View.GONE);
-                    edtInput.setVisibility(View.VISIBLE);
-                    btnSave.setVisibility(View.VISIBLE);
-                    btnCancel.setVisibility(View.VISIBLE);
-                    btnAddImage.setVisibility(View.VISIBLE);
-                    imgInputImage.setVisibility(View.VISIBLE);
-
-                    // Hiển thị dữ liệu trang báo được chọn
+                    appearForm();
                     Outlet outletSelected = arrlOutlet.get(position);
                     edtInput.setText(outletSelected.getName());
-
-                    // Chuyển đổi Base64 thành Bitmap để hiển thị hình ảnh
-                    imgInputImage.setImageBitmap(convertBase64ToBitmap(outletSelected.getLogo()));
+                    imgInputImage.setImageBitmap(Static.convertBase64ToBitmap(outletSelected.getLogo()));
+                    imgInputImage.setVisibility(View.VISIBLE);
 
                     // Xử lý nút lưu
                     btnSave.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DatabaseReference outletRef = FirebaseDatabase.getInstance().getReference("Outlet").child(arrlOutlet.get(position).getId());
                             if (edtInput.getText().toString().isEmpty()) {
                                 Toast.makeText(getContext(), "Vui lòng nhập tên trang báo", Toast.LENGTH_SHORT).show();
-                            } else if (imageURI == null) {
-                                Map<String, Object> updates = new HashMap<>();
-                                updates.put("name", edtInput.getText().toString());
-                                outletRef.updateChildren(updates, new DatabaseReference.CompletionListener() {
-                                    @Override
-                                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                        if (error == null) {
-                                            resetForm();
-                                            load();
-                                            Toast.makeText(getContext(), "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getContext(), "Lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                            } else if (imageURI != null) {
-                                try {
-                                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), imageURI);
-                                    Map<String, Object> updates = new HashMap<>();
-                                    updates.put("name", edtInput.getText().toString());
-                                    updates.put("logo", convertBitmapToBase64(bitmap));
-                                    outletRef.updateChildren(updates, new DatabaseReference.CompletionListener() {
-                                        @Override
-                                        public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                            if (error == null) {
-                                                resetForm();
-                                                load();
-                                                Toast.makeText(getContext(), "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Toast.makeText(getContext(), "Lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
+                            }
+                            else
+                            {
+                            Outlet.editOultlet(arrlOutlet.get(position).getId(), edtInput, imageURI, getContext());
+                            Outlet.loadOutlet(myFireBaseDB, arrlOutlet, outletAdapter, progressBar);
+                            hideForm();
                             }
                         }
                     });
                 });
                 builder.setNegativeButton("Xóa", (dialog, which) -> {
-                    String key = arrlOutlet.get(position).getId();
-                    myFireBaseDB.child("Article")
-                            .orderByChild("outletName")
-                            .equalTo(arrlOutlet.get(position).getName())
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    // Duyệt qua các bài báo có category và xóa
-                                    for (DataSnapshot articleSnapshot : dataSnapshot.getChildren()) {
-                                        String articleId = articleSnapshot.getKey();
-                                        // Xóa bài báo
-                                        myFireBaseDB.child("Article").child(articleId).removeValue();
-                                    }
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                }
-                            });
-
-                    myFireBaseDB.child("Outlet").child(key).removeValue((error, ref) -> {
-                        if (error == null) {
-                            Toast.makeText(getContext(), "Xóa thành công", Toast.LENGTH_SHORT).show();
-                            outletAdapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getContext(), "Không thành công: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    Outlet.deleteOutlet(myFireBaseDB, arrlOutlet.get(position), getContext());
+                    Outlet.loadOutlet(myFireBaseDB, arrlOutlet, outletAdapter, progressBar);
                 });
                 builder.setNeutralButton("Hủy", (dialog, which) -> dialog.dismiss());
 
@@ -244,39 +165,6 @@ public class QuanLyTrangBaoFragment extends Fragment {
         return view;
     }
 
-    private void resetForm() {
-        edtInput.setText("");
-        imageURI = null;
-        btnAdd.setVisibility(View.VISIBLE);
-        edtInput.setVisibility(View.GONE);
-        btnSave.setVisibility(View.GONE);
-        btnCancel.setVisibility(View.GONE);
-        btnAddImage.setVisibility(View.GONE);
-        imgInputImage.setVisibility(View.GONE);
-    }
-
-    private void load() {
-        myFireBaseDB.child("Outlet").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrlOutlet.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Outlet outlet = dataSnapshot.getValue(Outlet.class);
-                    if (outlet != null) {
-                        arrlOutlet.add(outlet);
-                    }
-                }
-                outletAdapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(requireContext(), "Lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -286,17 +174,24 @@ public class QuanLyTrangBaoFragment extends Fragment {
             imgInputImage.setVisibility(View.VISIBLE);
         }
     }
-
-    private String convertBitmapToBase64(Bitmap bitmap) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-        byte[] byteArray = outputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    private void appearForm()
+    {
+        btnAdd.setVisibility(View.GONE);
+        edtInput.setVisibility(View.VISIBLE);
+        btnSave.setVisibility(View.VISIBLE);
+        btnCancel.setVisibility(View.VISIBLE);
+        btnAddImage.setVisibility(View.VISIBLE);
+        edtInput.requestFocus();
     }
-
-    private Bitmap convertBase64ToBitmap(String base64String) {
-        byte[] decodedBytes = Base64.decode(base64String, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-    }
-
+     private void hideForm()
+     {
+         edtInput.setText("");
+         imageURI = null;
+         btnAdd.setVisibility(View.VISIBLE);
+         edtInput.setVisibility(View.GONE);
+         btnSave.setVisibility(View.GONE);
+         btnCancel.setVisibility(View.GONE);
+         btnAddImage.setVisibility(View.GONE);
+         imgInputImage.setVisibility(View.GONE);
+     }
 }

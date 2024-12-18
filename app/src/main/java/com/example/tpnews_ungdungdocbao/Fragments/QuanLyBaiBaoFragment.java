@@ -28,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import com.example.tpnews_ungdungdocbao.Data.Static;
 import com.example.tpnews_ungdungdocbao.Models.Article;
 import com.example.tpnews_ungdungdocbao.Models.Category;
 import com.example.tpnews_ungdungdocbao.Models.Outlet;
@@ -47,7 +48,7 @@ import com.example.tpnews_ungdungdocbao.Adapters.ArticleManagerAdapter;
 
 public class QuanLyBaiBaoFragment extends Fragment {
 
-    Button btnSaveContent, btnAddImageNews, btnAddContent, btnCancelContent, btnUpdate;
+    Button btnSaveContent, btnAddImageNews, btnAddContent, btnCancelContent;
     EditText edtInputContent, edtInputDescription, edtInputTitle;
     ImageView imgInputImage;
     Uri imageURI;
@@ -57,14 +58,14 @@ public class QuanLyBaiBaoFragment extends Fragment {
     Spinner spOutlet;
     ArrayList<Article> arrlArticle;
     ArrayList<Outlet> arrlOutlet;
-    ArrayList<String> arrlCategory;
+    ArrayList <Category> arrlCategory;
     ProgressBar progressBar;
     ArticleManagerAdapter articleAdapter;
 
     @Override
     public void onResume() {
         super.onResume();
-        load();
+        Article.loadArticles(myFireBaseDB, arrlArticle, articleAdapter, progressBar);
     }
 
     @Override
@@ -72,14 +73,13 @@ public class QuanLyBaiBaoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_quan_ly_bai_bao, container, false);
 
-
+        // Ánh xạ giao diện
         progressBar= view.findViewById(R.id.progressBarArticleManager);
         myFireBaseDB = FirebaseDatabase.getInstance().getReference();
         btnAddContent = view.findViewById(R.id.btnAddContent);
         btnCancelContent = view.findViewById(R.id.btnCancelContent);
         btnSaveContent = view.findViewById(R.id.btnSaveContent);
         btnAddImageNews = view.findViewById(R.id.btnAddImageNews);
-        btnUpdate = view.findViewById(R.id.btnUpdateArticle);
         edtInputDescription = view.findViewById(R.id.edtInputDescription);
         edtInputTitle = view.findViewById(R.id.edtInputTitle);
         edtInputContent = view.findViewById(R.id.edtInputContent);
@@ -87,6 +87,7 @@ public class QuanLyBaiBaoFragment extends Fragment {
         lvArticle = view.findViewById(R.id.lvArticleManager);
         spOutlet = view.findViewById(R.id.spOutlet);
         spCategory = view.findViewById(R.id.spCategory);
+
         ArrayAdapter outletAdapter;
         ArrayAdapter catAdapter;
 
@@ -124,7 +125,7 @@ public class QuanLyBaiBaoFragment extends Fragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Category cat = dataSnapshot.getValue(Category.class);
                     if (cat != null) {
-                        arrlCategory.add(cat.getName());
+                        arrlCategory.add(cat);
                     }
                 }
                 catAdapter.notifyDataSetChanged();
@@ -142,16 +143,7 @@ public class QuanLyBaiBaoFragment extends Fragment {
         lvArticle.setAdapter(articleAdapter);
 
         btnAddContent.setOnClickListener(v -> {
-            btnAddContent.setVisibility(View.GONE);
-            btnSaveContent.setVisibility(View.VISIBLE);
-            btnCancelContent.setVisibility(View.VISIBLE);
-            btnAddImageNews.setVisibility(View.VISIBLE);
-            edtInputTitle.setVisibility(View.VISIBLE);
-            edtInputDescription.setVisibility(View.VISIBLE);
-            edtInputContent.setVisibility(View.VISIBLE);
-            spCategory.setVisibility(View.VISIBLE);
-            spOutlet.setVisibility(View.VISIBLE);
-            lvArticle.setVisibility(View.GONE);
+           appearForm();
         });
 
         // Mở Intent chọn hình ảnh từ thiết bị
@@ -171,33 +163,18 @@ public class QuanLyBaiBaoFragment extends Fragment {
             } else if (imageURI == null) {
                 Toast.makeText(getContext(), "Vui lòng chọn hình ảnh", Toast.LENGTH_SHORT).show();
             } else {
-                    try
-                    {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), imageURI);
-                        String base64String = convertBitmapToBase64(bitmap);
-                        Outlet outlet =  (Outlet) spOutlet.getSelectedItem();
-                        String outletLogo = outlet.getLogo();
-                        String outletName = outlet.getName();
-                        String key = myFireBaseDB.child("Article").push().getKey();
-                        Article article = new Article(key, edtInputTitle.getText().toString(), edtInputDescription.getText().toString(), edtInputContent.getText().toString(), base64String, outletName, outletLogo, spCategory.getSelectedItem().toString());
-                        myFireBaseDB.child("Article").child(key).setValue(article, (error, ref) -> {
-                            if (error == null) {
-                                load();
-                                Toast.makeText(getContext(), "Lưu thành công", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                    }
-                    catch (Exception e)
-                    {
-                        Toast.makeText(getContext(), "Lỗi khi lưu bài viết: "+e, Toast.LENGTH_SHORT).show();
-                    }
-
-                    resetForm();
+                Article.addArticle(myFireBaseDB, edtInputTitle, edtInputDescription, edtInputContent, spOutlet, spCategory ,imageURI, getContext());
+                Article.loadArticles(myFireBaseDB, arrlArticle, articleAdapter, progressBar);
+                hideForm();
             }
         });
 
-        btnCancelContent.setOnClickListener(v -> resetForm());
+        btnCancelContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideForm();
+            }
+        });
 
         lvArticle.setOnItemClickListener((parent, view1, position, id) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -205,27 +182,15 @@ public class QuanLyBaiBaoFragment extends Fragment {
             builder.setMessage("Bạn muốn thực hiện hành động nào");
 
             builder.setPositiveButton("Sửa", (dialog, which) -> {
-                // Hiển thị các thành phần nhập liệu
-                btnAddContent.setVisibility(View.GONE);
-                btnUpdate.setVisibility(View.VISIBLE);
-                btnCancelContent.setVisibility(View.VISIBLE);
-                btnAddImageNews.setVisibility(View.VISIBLE);
-                edtInputTitle.setVisibility(View.VISIBLE);
-                edtInputDescription.setVisibility(View.VISIBLE);
-                edtInputContent.setVisibility(View.VISIBLE);
-                spCategory.setVisibility(View.VISIBLE);
-                spOutlet.setVisibility(View.VISIBLE);
-                imgInputImage.setVisibility(View.VISIBLE);
-                lvArticle.setVisibility(View.GONE);
-
-                // Hiển thị dữ liệu bài báo được chọn
+                appearForm();
                 Article selectedArticle = arrlArticle.get(position);
                 edtInputTitle.setText(selectedArticle.getTitle());
                 edtInputDescription.setText(selectedArticle.getDescription());
                 edtInputContent.setText(selectedArticle.getContent());
 
                 // Chuyển đổi Base64 thành Bitmap để hiển thị hình ảnh
-                imgInputImage.setImageBitmap(convertBase64ToBitmap(selectedArticle.getImage()));
+                imgInputImage.setImageBitmap(Static.convertBase64ToBitmap(selectedArticle.getImage()));
+                imgInputImage.setVisibility(View.VISIBLE);
 
                 // Cập nhật spinner Category với dữ liệu bài viết chọn
                 String selectedCategory = selectedArticle.getCategory();
@@ -245,81 +210,19 @@ public class QuanLyBaiBaoFragment extends Fragment {
                     }
                 }
 
-                btnUpdate.setOnClickListener(v -> {
+                btnSaveContent.setOnClickListener(v -> {
                     if (edtInputTitle.getText().toString().isEmpty()) {
                         Toast.makeText(getContext(), "Vui lòng nhập tiêu đề", Toast.LENGTH_SHORT).show();
                     } else if (edtInputDescription.getText().toString().isEmpty()) {
                         Toast.makeText(getContext(), "Vui lòng nhập mô tả", Toast.LENGTH_SHORT).show();
                     } else if (edtInputContent.getText().toString().isEmpty()) {
                         Toast.makeText(getContext(), "Vui lòng nhập nội dung", Toast.LENGTH_SHORT).show();
-                    } else {
-                            DatabaseReference articleRef = FirebaseDatabase.getInstance().getReference("Article").child(arrlArticle.get(position).getId());
-                            if (imageURI!=null)
-                            {
-                                try
-                                {
-                                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), imageURI);
-                                    String base64String = convertBitmapToBase64(bitmap);
-                                    Outlet outlet = (Outlet) spOutlet.getSelectedItem();
-                                    String outletName = outlet.getName();
-                                    String outletLogo = outlet.getLogo();
-
-                                    Map<String, Object> updates = new HashMap<>();
-                                    updates.put("title", edtInputTitle.getText().toString());
-                                    updates.put("description", edtInputDescription.getText().toString());
-                                    updates.put("content", edtInputContent.getText().toString());
-                                    updates.put("image", base64String);
-                                    updates.put("outletName", outletName);
-                                    updates.put("outletLogo", outletLogo);
-                                    updates.put("category", spCategory.getSelectedItem().toString());
-                                    articleRef.updateChildren(updates, new DatabaseReference.CompletionListener() {
-                                        @Override
-                                        public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                            if (error==null) {
-                                                resetForm();
-                                                load();
-                                                Toast.makeText(getContext(), "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Toast.makeText(getContext(), "Lỗi: "+error.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-                                }
-                                catch (Exception e)
-                                {
-                                    Toast.makeText(getContext(), "Lỗi khi cập nhật bài viết: "+e, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                            else
-                            {
-                                Outlet outlet = (Outlet) spOutlet.getSelectedItem();
-                                String outletName = outlet.getName();
-                                String outletLogo = outlet.getLogo();
-
-                                Map<String, Object> updates = new HashMap<>();
-                                updates.put("title", edtInputTitle.getText().toString());
-                                updates.put("description", edtInputDescription.getText().toString());
-                                updates.put("content", edtInputContent.getText().toString());
-                                updates.put("outletName", outletName);
-                                updates.put("outletLogo", outletLogo);
-                                updates.put("category", spCategory.getSelectedItem().toString());
-
-                                articleRef.updateChildren(updates, new DatabaseReference.CompletionListener() {
-                                    @Override
-                                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                        if (error==null) {
-                                            resetForm();
-                                            load();
-                                            Toast.makeText(getContext(), "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getContext(), "Lỗi: "+error.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                            }
-
-
-                        resetForm();
+                    }
+                    else
+                    {
+                        Article.editArticle(arrlArticle.get(position).getId(), edtInputTitle, edtInputDescription, edtInputContent, spOutlet, spCategory, imageURI, getContext());
+                        Article.loadArticles(myFireBaseDB, arrlArticle, articleAdapter, progressBar);
+                        hideForm();
                     }
                 });
 
@@ -327,15 +230,8 @@ public class QuanLyBaiBaoFragment extends Fragment {
             });
 
             builder.setNegativeButton("Xóa", (dialog, which) -> {
-                String key = arrlArticle.get(position).getId();
-                myFireBaseDB.child("Article").child(key).removeValue((error, ref) -> {
-                    if (error == null) {
-                        Toast.makeText(getContext(), "Xóa thành công", Toast.LENGTH_SHORT).show();
-                        articleAdapter.notifyDataSetChanged();
-                    } else {
-                        Toast.makeText(getContext(), "Xóa không thành công: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+               Article.deleteArticle(myFireBaseDB, arrlArticle.get(position).getId(), getContext());
+                Article.loadArticles(myFireBaseDB, arrlArticle, articleAdapter, progressBar);
             });
 
             builder.setNeutralButton("Hủy", (dialog, which) -> dialog.dismiss());
@@ -358,55 +254,37 @@ public class QuanLyBaiBaoFragment extends Fragment {
             imgInputImage.setVisibility(View.VISIBLE);
         }
     }
-
-    private void load() {
-        myFireBaseDB.child("Article").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrlArticle.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Article article = dataSnapshot.getValue(Article.class);
-                    if (article != null) {
-                        arrlArticle.add(article);
-                    }
-                }
-                articleAdapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void appearForm()
+    {
+        btnAddContent.setVisibility(View.GONE);
+        btnSaveContent.setVisibility(View.VISIBLE);
+        btnCancelContent.setVisibility(View.VISIBLE);
+        btnAddImageNews.setVisibility(View.VISIBLE);
+        edtInputTitle.setVisibility(View.VISIBLE);
+        edtInputDescription.setVisibility(View.VISIBLE);
+        edtInputContent.setVisibility(View.VISIBLE);
+        spCategory.setVisibility(View.VISIBLE);
+        spOutlet.setVisibility(View.VISIBLE);
+        edtInputTitle.requestFocus();
     }
 
-    private void resetForm() {
+    private void hideForm()
+    {
         btnAddContent.setVisibility(View.VISIBLE);
         btnSaveContent.setVisibility(View.GONE);
         btnCancelContent.setVisibility(View.GONE);
         btnAddImageNews.setVisibility(View.GONE);
-        btnUpdate.setVisibility(View.GONE);
         edtInputTitle.setVisibility(View.GONE);
         edtInputDescription.setVisibility(View.GONE);
         edtInputContent.setVisibility(View.GONE);
         spCategory.setVisibility(View.GONE);
         spOutlet.setVisibility(View.GONE);
         imgInputImage.setVisibility(View.GONE);
-        lvArticle.setVisibility(View.VISIBLE);
         edtInputTitle.setText("");
         edtInputDescription.setText("");
         edtInputContent.setText("");
         imageURI = null;
     }
-    private String convertBitmapToBase64(Bitmap bitmap) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-        byte[] byteArray = outputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
-    }
-    private Bitmap convertBase64ToBitmap(String base64String) {
-        byte[] decodedBytes = Base64.decode(base64String, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-    }
+
+
 }
