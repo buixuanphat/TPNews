@@ -28,11 +28,11 @@
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Font Style"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:paddingBottom="8dp"
+        android:text="Phông chữ"
         android:textColor="@color/black"
-        android:paddingBottom="8dp"/>
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <!-- Table for Font Styles -->
     <TableLayout

@@ -131,6 +131,7 @@ public class Article {
         });
     }
 
+
     public static void addArticle(DatabaseReference myFireBaseDB, EditText title, EditText description, EditText content, Spinner spOutlet, Spinner spCategory, Uri uri, Context context) {
 
         try

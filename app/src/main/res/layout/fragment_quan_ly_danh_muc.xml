@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".Fragments.QuanLyDanhMucFragment">
 
@@ -16,8 +17,11 @@
             android:id="@+id/btnAddCat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thêm danh mục"
-            android:layout_margin="10dp"/>
+            android:text="Thêm"
+            android:layout_margin="5dp"
+            android:background="@drawable/custom_btn_add"
+            android:textSize="18sp"
+            app:backgroundTint="@null"/>
 
         <Button
             android:id="@+id/btnSaveCat"
@@ -25,8 +29,10 @@
             android:layout_height="wrap_content"
             android:text="Lưu "
             android:visibility="gone"
-            android:backgroundTint="#35A52A"
-            android:layout_margin="10dp"/>
+            android:background="@drawable/custom_btn_save"
+            android:layout_margin="5dp"
+            android:textSize="18sp"
+            app:backgroundTint="@null"/>
 
         <Button
             android:id="@+id/btnCancelCat"
@@ -34,8 +40,10 @@
             android:layout_height="wrap_content"
             android:text="Hủy"
             android:visibility="gone"
-            android:backgroundTint="#C70808"
-            android:layout_margin="10dp"/>
+            android:background="@drawable/custom_btn_cancel"
+            android:layout_margin="5dp"
+            android:textSize="18sp"
+            app:backgroundTint="@null"/>
     </LinearLayout>
 
     <EditText

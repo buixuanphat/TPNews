@@ -16,42 +16,44 @@
                     android:id="@+id/btnAddOutlet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="Thêm trang báo"
-                    android:textSize="18dp"
-                    android:layout_margin="10dp"/>
+                    android:text="Thêm"
+                    android:layout_margin="5dp"
+                    android:textSize="18sp"
+                    app:backgroundTint="@null"
+                    android:background="@drawable/custom_btn_add"/>
 
                 <Button
                     android:id="@+id/btnLogoOutlet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
                     android:text="Chọn ảnh"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
+                    app:backgroundTint="@null"
                     android:visibility="gone"
-                    android:layout_margin="10dp"/>
+                    android:layout_margin="5dp"
+                    android:background="@drawable/custom_btn_add"/>
 
                 <Button
                     android:id="@+id/btnSaveOutlet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#35A52A"
-                    android:padding="10dp"
+                    android:background="@drawable/custom_btn_save"
                     android:text="Lưu"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
+                    app:backgroundTint="@null"
                     android:visibility="gone"
-                    android:layout_margin="10dp"/>
+                    android:layout_margin="5dp"/>
 
                 <Button
                     android:id="@+id/btnCancelOutlet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#C70808"
-                    android:padding="10dp"
+                    android:background="@drawable/custom_btn_cancel"
+                    android:layout_margin="5dp"
                     android:text="Hủy"
-                    android:textSize="18dp"
-                    android:visibility="gone"
-                    android:layout_margin="10dp"/>
+                    android:textSize="18sp"
+                    app:backgroundTint="@null"
+                    android:visibility="gone" />
         </LinearLayout>
 
         <EditText

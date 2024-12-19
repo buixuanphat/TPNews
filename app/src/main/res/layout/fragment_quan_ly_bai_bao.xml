@@ -2,55 +2,79 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
     android:orientation="vertical"
     tools:context=".Fragments.QuanLyBaiBaoFragment">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnAddContent"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Thêm bài báo"
-            android:textSize="18dp" />
-
+            android:layout_margin="5dp"
+            android:background="@drawable/custom_btn_add"
+            android:text="Thêm"
+            android:textSize="18sp"
+            app:backgroundTint="@null" />
 
         <Button
             android:id="@+id/btnAddImageNews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/custom_btn_add"
             android:text="Thêm ảnh"
-            android:textSize="18dp"
-            android:visibility="gone" />
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:backgroundTint="@null" />
 
         <Button
             android:id="@+id/btnSaveContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:backgroundTint="#35A52A"
+            android:layout_margin="5dp"
+            android:background="@drawable/custom_btn_save"
             android:text="Lưu"
-            android:textSize="18dp"
-            android:visibility="gone" />
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:backgroundTint="@null" />
 
         <Button
             android:id="@+id/btnCancelContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:backgroundTint="#C70808"
+            android:layout_margin="5dp"
+            android:background="@drawable/custom_btn_cancel"
             android:text="Hủy"
-            android:textSize="18dp"
-            android:visibility="gone" />
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:backgroundTint="@null" />
 
+        <EditText
+            android:id="@+id/edtSearch"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:hint="Tìm kiếm"
+            android:inputType="text"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
+
+        <ImageButton
+            android:id="@+id/imageButtonSearch"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/search"
+            android:layout_gravity="center_vertical"
+            android:scaleType="centerCrop"
+            android:background="@color/white"/>
     </LinearLayout>
 
     <Spinner
@@ -75,51 +99,49 @@
             android:orientation="vertical">
 
 
-
             <EditText
                 android:id="@+id/edtInputTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:fontFamily="@font/titlefont"
                 android:hint="Tiêu đề "
                 android:inputType="textMultiLine"
-                android:visibility="gone"
-                android:background="@color/white"
-                android:textSize="18dp"
                 android:padding="10dp"
-                android:fontFamily="@font/titlefont"/>
+                android:textSize="18dp"
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/edtInputDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:hint="Mô tả"
                 android:inputType="textMultiLine"
-                android:visibility="gone"
                 android:padding="10dp"
-                android:background="@color/white"/>
+                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/imgInputImageNews"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:scaleType="centerCrop"
-                android:visibility="gone"/>
+                android:visibility="gone" />
+
             <EditText
                 android:id="@+id/edtInputContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start|top"
-                android:inputType="textMultiLine"
-                android:visibility="gone"
                 android:background="@color/white"
+                android:gravity="start|top"
+                android:hint="Nội dung"
+                android:inputType="textMultiLine"
                 android:padding="10dp"
-                android:hint="Nội dung"/>
+                android:visibility="gone" />
 
 
         </LinearLayout>
     </ScrollView>
-
-
 
 
     <FrameLayout
@@ -133,11 +155,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
-            <ListView
-                android:id="@+id/lvArticleManager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
+        <ListView
+            android:id="@+id/lvArticleManager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 
     </FrameLayout>

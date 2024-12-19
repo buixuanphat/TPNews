@@ -19,8 +19,6 @@
             android:layout_height="50dp"
             android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,15 +26,13 @@
             android:id="@+id/imageButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="182dp"
             android:background="@android:color/transparent"
+            android:paddingTop="5dp"
             android:scaleType="centerCrop"
+            android:src="@drawable/font_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgvDetailOutlet"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/font_size"
-            android:paddingTop="5dp"/>
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView

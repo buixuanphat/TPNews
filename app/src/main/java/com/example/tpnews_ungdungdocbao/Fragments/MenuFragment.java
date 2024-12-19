@@ -95,6 +95,18 @@ public class MenuFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+
+        if(tvName.getText().toString().isEmpty())
+        {
+            btnAccount.setVisibility(View.VISIBLE);
+            btnLogOut.setVisibility(View.GONE);
+        }
+        else
+        {
+            btnAccount.setVisibility(View.GONE);
+            btnLogOut.setVisibility(View.VISIBLE);
+        }
+
     }
 
     Button btnAdmin;

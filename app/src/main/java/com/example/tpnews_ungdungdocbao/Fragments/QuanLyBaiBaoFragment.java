@@ -15,16 +15,20 @@ import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -49,14 +53,15 @@ import com.example.tpnews_ungdungdocbao.Adapters.ArticleManagerAdapter;
 public class QuanLyBaiBaoFragment extends Fragment {
 
     Button btnSaveContent, btnAddImageNews, btnAddContent, btnCancelContent;
-    EditText edtInputContent, edtInputDescription, edtInputTitle;
+    EditText edtInputContent, edtInputDescription, edtInputTitle, edtSearch;
     ImageView imgInputImage;
     Uri imageURI;
     private DatabaseReference myFireBaseDB;
     ListView lvArticle;
     Spinner spCategory;
     Spinner spOutlet;
-    ArrayList<Article> arrlArticle;
+    ImageButton imageButtonSearch;
+    ArrayList<Article> arrlArticle, clone;
     ArrayList<Outlet> arrlOutlet;
     ArrayList <Category> arrlCategory;
     ProgressBar progressBar;
@@ -65,6 +70,7 @@ public class QuanLyBaiBaoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        lvArticle.setAdapter(articleAdapter);
         Article.loadArticles(myFireBaseDB, arrlArticle, articleAdapter, progressBar);
     }
 
@@ -83,10 +89,13 @@ public class QuanLyBaiBaoFragment extends Fragment {
         edtInputDescription = view.findViewById(R.id.edtInputDescription);
         edtInputTitle = view.findViewById(R.id.edtInputTitle);
         edtInputContent = view.findViewById(R.id.edtInputContent);
+        edtSearch = view.findViewById(R.id.edtSearch);
         imgInputImage = view.findViewById(R.id.imgInputImageNews);
         lvArticle = view.findViewById(R.id.lvArticleManager);
         spOutlet = view.findViewById(R.id.spOutlet);
         spCategory = view.findViewById(R.id.spCategory);
+        imageButtonSearch = view.findViewById(R.id.imageButtonSearch);
+
 
         ArrayAdapter outletAdapter;
         ArrayAdapter catAdapter;
@@ -241,6 +250,35 @@ public class QuanLyBaiBaoFragment extends Fragment {
         });
 
 
+
+
+        imageButtonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Nếu clone chưa được khởi tạo, lưu danh sách gốc
+                if (clone == null) {
+                    clone = new ArrayList<>(arrlArticle);
+                }
+
+                arrlArticle.clear();
+                for (Article article : clone) {
+                    if (article.getTitle().toLowerCase().contains(edtSearch.getText().toString().toLowerCase())) {
+                        arrlArticle.add(article);
+                    }
+                }
+
+                // Cập nhật giao diện
+                articleAdapter.notifyDataSetChanged();
+
+                // Hiển thị thông báo nếu không tìm thấy bài viết nào
+                if (arrlArticle.isEmpty()) {
+                    Toast.makeText(getContext(), "Không tìm thấy bài viết nào!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
         return view;
     }
 
@@ -266,6 +304,8 @@ public class QuanLyBaiBaoFragment extends Fragment {
         spCategory.setVisibility(View.VISIBLE);
         spOutlet.setVisibility(View.VISIBLE);
         edtInputTitle.requestFocus();
+        edtSearch.setVisibility(View.GONE);
+        imageButtonSearch.setVisibility(View.GONE);
     }
 
     private void hideForm()
@@ -284,6 +324,8 @@ public class QuanLyBaiBaoFragment extends Fragment {
         edtInputDescription.setText("");
         edtInputContent.setText("");
         imageURI = null;
+        edtSearch.setVisibility(View.VISIBLE);
+        imageButtonSearch.setVisibility(View.VISIBLE);
     }
 
 
